@@ -64,6 +64,7 @@ if (link.type === 'page' && !('uri' in link)) {
 }
 
 let href = '';
+
 switch (link.type) {
 	case 'url':
 		href = link.href;
@@ -76,7 +77,9 @@ switch (link.type) {
 			// For home page (empty URI), construct URL with just the language prefix
 			// Format: /language or / (if no language)
 			// Add hash fragment if it exists
-			href = `${currentLang ? `/${currentLang}` : ''}${hash ? `#${hash}` : ''}`;
+			href = `${currentLang ? `/${currentLang}` : `/`}${
+				hash ? `#${hash}` : ''
+			}`;
 		} else {
 			// For other pages, construct URL with language prefix and URI
 			// The URI from CMS already includes the full path, so use it as-is
@@ -106,6 +109,7 @@ const attributes = {
 	...(link.popup ? { target: '_blank', rel: 'noopener' } : {}),
 	...(link.type === 'file' ? { download: '' } : {}),
 };
+
 const defaultContent = link.title
 	? link.title
 	: link.type === 'page'
