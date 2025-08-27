@@ -66,7 +66,15 @@ const getCommonClasses = (item, isActive, isLast) => [
 			// Link attributes
 			const target = isUrl ? `${isPopup ? '_blank' : '_self'}` : undefined;
 			const rel = isUrl ? `${isPopup ? 'noopener noreferrer' : ''}` : undefined;
-			const isActive = path.includes(item.uri);
+
+			// Active state logic: exclude anchor links when on homepage
+			const isHomepage =
+				path === '/' ||
+				path === `/${effectiveLang}` ||
+				path === `/${effectiveLang}/`;
+			const isAnchorLink = !!item.hash;
+			const isActive = !(isHomepage && isAnchorLink) && path.includes(item.uri);
+
 			const isLast = translations.length === 0 && index === links.length - 1;
 
 			// Render appropriate component
@@ -96,3 +104,113 @@ const getCommonClasses = (item, isActive, isLast) => [
 			);
 		})
 }
+
+<style lang="css" is:global>
+	/* Header navigation active color variants */
+	.headerColorCurrent {
+		&--primary .nav-link.active {
+			@apply text-primary;
+		}
+
+		&--secondary .nav-link.active {
+			@apply text-secondary;
+		}
+
+		&--tertiary .nav-link.active {
+			@apply text-tertiary;
+		}
+
+		&--white .nav-link.active {
+			@apply text-white;
+		}
+
+		&--black .nav-link.active {
+			@apply text-black;
+		}
+
+		&--transparent .nav-link.active {
+			@apply text-transparent;
+		}
+	}
+
+	/* Header active state (when scrolled) */
+	.header--active .headerColorCurrentActive {
+		&--primary .nav-link.active {
+			@apply text-primary;
+		}
+
+		&--secondary .nav-link.active {
+			@apply text-secondary;
+		}
+
+		&--tertiary .nav-link.active {
+			@apply text-tertiary;
+		}
+
+		&--white .nav-link.active {
+			@apply text-white;
+		}
+
+		&--black .nav-link.active {
+			@apply text-black;
+		}
+
+		&--transparent .nav-link.active {
+			@apply text-transparent;
+		}
+	}
+
+	/* Hamburger navigation active color variants */
+	.hamburgerFontColorCurrent {
+		&--primary .nav-link.active {
+			@apply text-primary;
+		}
+
+		&--secondary .nav-link.active {
+			@apply text-secondary;
+		}
+
+		&--tertiary .nav-link.active {
+			@apply text-tertiary;
+		}
+
+		&--white .nav-link.active {
+			@apply text-white;
+		}
+
+		&--black .nav-link.active {
+			@apply text-black;
+		}
+
+		&--transparent .nav-link.active {
+			@apply text-transparent;
+		}
+	}
+
+	/* Hamburger active state (when header is scrolled) */
+	.header--active .hamburgerFontColorCurrentActive {
+		&--primary .nav-link.active {
+			@apply text-primary;
+		}
+
+		&--secondary .nav-link.active {
+			@apply text-secondary;
+		}
+
+		&--tertiary .nav-link.active {
+			@apply text-tertiary;
+		}
+
+		&--white .nav-link.active {
+			@apply text-white;
+		}
+
+		&--black .nav-link.active {
+			@apply text-black;
+		}
+
+		&--transparent .nav-link.active {
+			@apply text-transparent;
+		}
+	}
+</style>

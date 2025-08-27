@@ -48,6 +48,18 @@ export interface GlobalData {
 		url2?: string;
 	}>;
 	fontSize: FontSizeItem[];
+
+	// Header color properties
+	headerColorCurrent: string;
+	headerColorCurrentActive: string;
+
+	// Hamburger color properties
+	hamburgerFontColorCurrent: string;
+	hamburgerFontColorCurrentActive: string;
+
+	// Navigation data
+	navHeader?: any[];
+	navHamburger?: any[];
 }
 
 export interface ContentBlock {

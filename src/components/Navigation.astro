@@ -1,6 +1,6 @@
 ---
-import type { NavigationProps } from '@types';
-import type { GlobalData } from '@types';
+import type { NavigationProps } from '../types';
+import type { GlobalData } from '../types';
 import NavLinks from '@components/NavLinks.astro';
 
 interface Props {
@@ -26,6 +26,8 @@ const logoAlign = global.logoAlign;
 <div
 	class:list={[
 		'nav-links--desktop',
+		`headerColorCurrent--${global.headerColorCurrent}`,
+		`headerColorCurrentActive--${global.headerColorCurrentActive}`,
 		'items-center',
 		'hidden',
 		'lg:flex',
