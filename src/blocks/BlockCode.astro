@@ -1,5 +1,7 @@
 ---
-const { code, metadata } = Astro.props;
+import type { BlockCodeComponentProps } from '../types/components.types';
+
+const { code, metadata } = Astro.props as BlockCodeComponentProps;
 ---
 
 <div

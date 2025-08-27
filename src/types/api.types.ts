@@ -51,8 +51,15 @@ export interface GlobalData {
 }
 
 export interface ContentBlock {
+	id: string;
 	type: string;
-	content: Record<string, unknown>;
+	content: Record<string, any> & {
+		metadata?: {
+			identifier?: string;
+			classes?: string;
+			attributes?: Record<string, any>;
+		};
+	};
 }
 
 export interface PageData {

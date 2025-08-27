@@ -1,6 +1,9 @@
 ---
 import VectorImage from '@components/VectorImage.astro';
-const { image, widthMobile, widthDesktop, widthAlign, metadata } = Astro.props;
+import type { BlockVectorComponentProps } from '../types/components.types';
+
+const { image, widthMobile, widthDesktop, widthAlign, metadata } =
+	Astro.props as BlockVectorComponentProps;
 ---
 
 <div

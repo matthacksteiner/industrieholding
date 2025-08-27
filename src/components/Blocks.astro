@@ -22,6 +22,16 @@ import BlockCard from '@blocks/BlockCard.astro';
 import BlockContactForm from '@blocks/BlockContactForm.astro';
 import BlockNavigation from '@blocks/BlockNavigation.astro';
 import BlockFeatured from '@blocks/BlockFeatured.astro';
+import type { ContentBlock } from '../types/api.types';
+
+interface Props {
+	blocks: ContentBlock[];
+	global: any;
+	span?: number;
+	backgroundContainer?: boolean;
+	data?: any;
+}
+
 const { blocks, global, span, backgroundContainer, data } = Astro.props;
 ---
 
@@ -311,20 +321,20 @@ const { blocks, global, span, backgroundContainer, data } = Astro.props;
 				case 'contactForm':
 					return (
 						<BlockContactForm
-							formName={block.content.formname}
-							emailSubject={block.content.emailsubject}
-							successPage={block.content.successpage}
-							spamProtection={block.content.spamprotection}
+							formName={block.content.formName}
+							emailSubject={block.content.emailSubject}
+							successPage={block.content.successPage}
+							spamProtection={block.content.spamProtection}
 							fields={block.content.fields}
-							fieldSpacing={block.content.fieldspacing}
-							formWidth={block.content.formwidth}
-							formAlign={block.content.formalign}
-							textGroup={block.content.textgroup}
-							formBorderRadius={block.content.formborderradius}
-							buttonLocal={block.content.buttonlocal}
-							buttonSettings={block.content.buttonsettings}
-							buttonColors={block.content.buttoncolors}
-							buttonAlign={block.content.buttonalign}
+							fieldSpacing={block.content.fieldSpacing}
+							formWidth={block.content.formWidth}
+							formAlign={block.content.formAlign}
+							textGroup={block.content.textGroup}
+							formBorderRadius={block.content.formBorderRadius}
+							buttonLocal={block.content.buttonLocal}
+							buttonSettings={block.content.buttonSettings}
+							buttonColors={block.content.buttonColors}
+							buttonAlign={block.content.buttonAlign}
 							global={global}
 							metadata={block.content.metadata}
 						/>

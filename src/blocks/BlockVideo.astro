@@ -1,5 +1,7 @@
 ---
 import { CldVideoPlayer } from 'astro-cloudinary';
+import type { BlockVideoComponentProps } from '../types/components.types';
+
 const CLOUDINARY_CLOUD_NAME = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
 const {
 	source,
@@ -20,7 +22,7 @@ const {
 	toggle,
 	metadata,
 	aboveFold,
-} = Astro.props;
+} = Astro.props as BlockVideoComponentProps;
 const hasOption = (option) => options.includes(option);
 
 const autoplay = hasOption('autoplay');
@@ -28,23 +30,26 @@ const loop = hasOption('loop');
 const muted = hasOption('muted');
 const full = hasOption('full') ? 'h-screen object-cover' : null;
 const controls = hasOption('controls');
-const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
-const isVimeo = url.includes('vimeo.com');
-const isCloudinary = url.includes('cloudinary.com');
-const cloudinaryID = isCloudinary ? url.split('/').pop().split('.')[0] : null;
+const isYoutube = url?.includes('youtube.com') || url?.includes('youtu.be');
+const isVimeo = url?.includes('vimeo.com');
+const isCloudinary = url?.includes('cloudinary.com');
+const cloudinaryID =
+	isCloudinary && url ? url.split('/').pop()?.split('.')[0] : null;
 const thumb = thumbnail ? thumbnail.url : null;
 const cursor = thumbnail ? 'cursor-pointer' : null;
-const youtubeNoCookies = isYoutube
-	? url
-			.replace(
-				'https://www.youtube.com/watch?v=',
-				'https://www.youtube-nocookie.com/embed/'
-			)
-			.replace('https://youtu.be/', 'https://www.youtube-nocookie.com/embed/')
-	: null;
-const vimeoPlayer = isVimeo
-	? url.replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
-	: null;
+const youtubeNoCookies =
+	isYoutube && url
+		? url
+				.replace(
+					'https://www.youtube.com/watch?v=',
+					'https://www.youtube-nocookie.com/embed/'
+				)
+				.replace('https://youtu.be/', 'https://www.youtube-nocookie.com/embed/')
+		: null;
+const vimeoPlayer =
+	isVimeo && url
+		? url.replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
+		: null;
 ---
 
 <div
@@ -69,7 +74,7 @@ const vimeoPlayer = isVimeo
 					<>
 						{CLOUDINARY_CLOUD_NAME ? (
 							<CldVideoPlayer
-								src={cloudinaryID}
+								src={cloudinaryID || ''}
 								fluid={true}
 								autoplay={autoplay}
 								loop={loop}
@@ -126,7 +131,7 @@ const vimeoPlayer = isVimeo
 			) : (
 				<video
 					preload={aboveFold ? 'auto' : 'none'}
-					id={file.identifier ? `${file.identifier}` : undefined}
+					id={file?.identifier ? `${file.identifier}` : undefined}
 					muted={muted || autoplay}
 					autoplay={autoplay}
 					loop={loop}
@@ -135,11 +140,11 @@ const vimeoPlayer = isVimeo
 					controls={controls}
 					playsinline={autoplay}
 					poster={thumb}
-					class:list={[full, cursor, file.classes, 'w-full']}
+					class:list={[full, cursor, file?.classes, 'w-full']}
 				>
 					<source
-						src={aboveFold ? file.url : undefined}
-						data-src={file.url}
+						src={aboveFold ? file?.url : undefined}
+						data-src={file?.url}
 						type="video/mp4"
 					/>
 				</video>

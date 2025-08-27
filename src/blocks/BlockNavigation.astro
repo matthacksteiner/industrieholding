@@ -1,19 +1,21 @@
 ---
 import { toRem } from '@lib/helpers';
 import Link from '@components/Link.astro';
+import type { BlockNavigationComponentProps } from '../types/components.types';
 
 const {
 	previousToggle,
 	nextToggle,
 	previousLabel,
 	nextLabel,
+	navigationAlign,
 	buttonLocal,
 	buttonSettings,
 	buttonColors,
 	metadata,
 	global,
-} = Astro.props;
-const { data } = Astro.props;
+	data,
+} = Astro.props as BlockNavigationComponentProps;
 const pageNavigation = data?.navigation;
 // Don't render if no navigation data available
 if (!pageNavigation || (!pageNavigation.prevPage && !pageNavigation.nextPage)) {
@@ -28,7 +30,9 @@ const prevLabel = previousLabel || '← Vorheriges Projekt';
 const nextLabelText = nextLabel || 'Nächstes Projekt →';
 
 // Default alignment for navigation
-const alignmentClass = 'justify-between';
+const alignmentClass = navigationAlign
+	? `justify-${navigationAlign}`
+	: 'justify-between';
 
 // Button styling (use local button settings if enabled, otherwise global)
 const useLocalStyling = buttonLocal;
@@ -39,13 +43,13 @@ const buttonFont = useLocalStyling
 	? buttonSettings?.buttonfont
 	: global.buttonFont;
 const buttonPadding = useLocalStyling
-	? toRem(buttonSettings?.buttonpadding)
+	? toRem(buttonSettings?.buttonpadding || 0)
 	: toRem(global.buttonPadding);
 const buttonBorderRadius = useLocalStyling
-	? toRem(buttonSettings?.buttonborderradius)
+	? toRem(buttonSettings?.buttonborderradius || 0)
 	: toRem(global.buttonBorderRadius);
 const buttonBorderWidth = useLocalStyling
-	? toRem(buttonSettings?.buttonborderwidth)
+	? toRem(buttonSettings?.buttonborderwidth || 0)
 	: toRem(global.buttonBorderWidth);
 
 const buttonBackgroundColor = useLocalStyling
@@ -69,6 +73,7 @@ const buttonBorderColorActive = useLocalStyling
 ---
 
 <nav
+	id={metadata?.identifier || undefined}
 	class:list={[
 		'navigation-block',
 		'flex',

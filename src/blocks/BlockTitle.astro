@@ -1,5 +1,8 @@
 ---
-const { title, font, size, align, color, Level, metadata } = Astro.props;
+import type { BlockTitleComponentProps } from '../types/components.types';
+
+const { title, font, size, align, color, Level, metadata } =
+	Astro.props as BlockTitleComponentProps;
 ---
 
 <div

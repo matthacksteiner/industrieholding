@@ -1,6 +1,8 @@
 ---
 import ImageComponent from '@components/ImageComponent.astro';
 import VectorImage from '@components/VectorImage.astro';
+import type { BlockSliderComponentProps } from '../types/components.types';
+
 const {
 	global,
 	images,
@@ -23,9 +25,10 @@ const {
 	ratioMobile,
 	ratioDesktop,
 	span,
+	backgroundContainer,
 	metadata,
 	aboveFold,
-} = Astro.props;
+} = Astro.props as BlockSliderComponentProps;
 const hasControl = (control) => controls && controls.includes(control);
 const arrows = hasControl('arrows');
 const dots = hasControl('dots');
@@ -78,6 +81,7 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 								ratioMobile={ratioMobile}
 								ratioDesktop={ratioDesktop}
 								span={span}
+								backgroundContainer={backgroundContainer}
 								aboveFold={aboveFold}
 								isFirstSlide={index === 0}
 							/>

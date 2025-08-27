@@ -1,6 +1,8 @@
 ---
 import { toRem } from '@lib/helpers';
 import Link from '@components/Link.astro';
+import type { BlockButtonComponentProps } from '../types/components.types';
+
 const {
 	link,
 	global,
@@ -10,7 +12,7 @@ const {
 	buttonSettings,
 	buttonColors,
 	metadata,
-} = Astro.props;
+} = Astro.props as BlockButtonComponentProps;
 const buttonFont =
 	buttonLocal && buttonSettings ? buttonSettings.buttonfont : global.buttonFont;
 const size =
@@ -19,7 +21,7 @@ const size =
 		: global.buttonFontSize;
 const buttonPadding =
 	buttonLocal && buttonSettings
-		? toRem(buttonSettings.buttonpadding)
+		? toRem(buttonSettings.buttonpadding || 0)
 		: toRem(global.buttonPadding);
 const color =
 	buttonLocal && buttonColors
@@ -47,13 +49,13 @@ const buttonBorderColorActive =
 		: global.buttonBorderColorActive;
 const buttonBorderWidth =
 	buttonLocal && buttonSettings
-		? toRem(buttonSettings.buttonborderwidth)
+		? toRem(buttonSettings.buttonborderwidth || 0)
 		: toRem(global.buttonBorderWidth);
 const buttonBorderRadius =
-	link && link.title && link.title.length === 1
+	link && (link as any).title && (link as any).title.length === 1
 		? '50%'
 		: buttonLocal && buttonSettings
-		? toRem(buttonSettings.buttonborderradius)
+		? toRem(buttonSettings.buttonborderradius || 0)
 		: toRem(global.buttonBorderRadius);
 ---
 
@@ -72,7 +74,7 @@ const buttonBorderRadius =
 	{
 		link && link.type && (
 			<Link
-				link={link}
+				link={link as any}
 				class:list={[
 					'button',
 					'inline-block',

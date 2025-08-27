@@ -42,4 +42,5 @@ export type {
 	ButtonProps,
 	PageRendererProps,
 	SectionImageProps,
+	BlockTextComponentProps,
 } from './components.types';

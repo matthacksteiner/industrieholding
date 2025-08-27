@@ -1,15 +1,26 @@
 ---
 import Blocks from '@components/Blocks.astro';
-const { columns, global, span: spanParent, data } = Astro.props;
+import type { BlockColumnsComponentProps } from '../types/components.types';
+
+const {
+	columns,
+	global,
+	span: spanParent,
+	metadata,
+} = Astro.props as BlockColumnsComponentProps;
 ---
 
-<section class="blockColumns grid-default">
+<section
+	id={metadata?.identifier || undefined}
+	class:list={['blockColumns', 'grid-default', metadata?.classes]}
+	{...metadata?.attributes}
+>
 	{
 		columns && (
 			<>
 				{columns.map((column, index) => {
 					const spanChild = column.span;
-					const span = spanChild / (12 / spanParent);
+					const span = spanChild / (12 / (spanParent || 12));
 					const blocks = column.blocks;
 					const colClass = `column lg:col-span-${spanChild}
 
@@ -21,8 +32,7 @@ const { columns, global, span: spanParent, data } = Astro.props;
 								blocks={blocks}
 								global={global}
 								span={span}
-								backgroundContainer="container"
-								data={data}
+								backgroundContainer={true}
 							/>
 						</section>
 					);

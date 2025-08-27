@@ -1,5 +1,8 @@
 ---
-const { borderStyle, borderWidth, borderColor, metadata } = Astro.props;
+import type { BlockLineComponentProps } from '../types/components.types';
+
+const { borderStyle, borderWidth, borderColor, metadata } =
+	Astro.props as BlockLineComponentProps;
 ---
 
 <div

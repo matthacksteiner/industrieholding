@@ -1,4 +1,6 @@
 ---
+import type { BlockAccordionComponentProps } from '../types/components.types';
+
 const {
 	items,
 	Level,
@@ -13,7 +15,7 @@ const {
 	borderColor,
 	metadata,
 	headlines,
-} = Astro.props;
+} = Astro.props as BlockAccordionComponentProps;
 const h1Font = headlines.h1.font;
 const h2Font = headlines.h2.font;
 const h3Font = headlines.h3.font;

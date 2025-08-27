@@ -1,5 +1,6 @@
 ---
 import ImageComponent from '@components/ImageComponent.astro';
+import type { BlockGalleryComponentProps } from '../types/components.types';
 
 const {
 	global,
@@ -13,9 +14,10 @@ const {
 	ratioMobile,
 	ratioDesktop,
 	span,
+	backgroundContainer,
 	metadata,
 	aboveFold,
-} = Astro.props;
+} = Astro.props as BlockGalleryComponentProps;
 // Convert padding values to numbers for CSS variables
 const paddingDesktopValue = viewPaddingDesktop
 	? parseInt(viewPaddingDesktop)
@@ -28,7 +30,7 @@ if (layoutType === 'masonry') {
 	layoutClass = 'masonry-layout';
 }
 
-const itemSpan = span / viewDesktop;
+const itemSpan = (span || 12) / (Number(viewDesktop) || 1);
 
 // Determine loading strategy based on aboveFold
 const loadingStrategy = aboveFold ? 'eager' : 'lazy';
@@ -57,6 +59,7 @@ const loadingStrategy = aboveFold ? 'eager' : 'lazy';
 							ratioDesktop={ratioDesktop}
 							span={itemSpan}
 							lightbox={lightbox}
+							backgroundContainer={backgroundContainer}
 							aboveFold={aboveFold}
 						/>
 					</div>

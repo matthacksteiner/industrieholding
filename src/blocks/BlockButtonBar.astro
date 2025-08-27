@@ -1,5 +1,6 @@
 ---
 import BlockButton from './BlockButton.astro';
+import type { BlockButtonBarComponentProps } from '../types/components.types';
 
 const {
 	buttons,
@@ -9,7 +10,7 @@ const {
 	buttonSettings,
 	buttonColors,
 	metadata,
-} = Astro.props;
+} = Astro.props as BlockButtonBarComponentProps;
 ---
 
 <div

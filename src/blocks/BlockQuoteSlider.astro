@@ -1,4 +1,6 @@
 ---
+import type { BlockQuoteSliderComponentProps } from '../types/components.types';
+
 const {
 	items,
 	titleFont,
@@ -13,7 +15,7 @@ const {
 	color,
 	time,
 	metadata,
-} = Astro.props;
+} = Astro.props as BlockQuoteSliderComponentProps;
 const hasControl = (control) => controls && controls.includes(control);
 const arrows = hasControl('arrows');
 const dots = hasControl('dots');

@@ -1,14 +1,16 @@
 ---
 import Columns from '@blocks/BlockColumns.astro';
-const { grid, global, span, data } = Astro.props;
+import type { BlockGridComponentProps } from '../types/components.types';
+
+const { grid, global, span, metadata } = Astro.props as BlockGridComponentProps;
 const grids = grid.content.grid;
 const title = grid.content.title;
 ---
 
-<section id={`${title}`} class="blockGrid blocks">
-	{
-		grids.map((grid) => (
-			<Columns {...grid} global={global} span={span} data={data} />
-		))
-	}
+<section
+	id={metadata?.identifier || title || undefined}
+	class:list={['blockGrid', 'blocks', metadata?.classes]}
+	{...metadata?.attributes}
+>
+	{grids.map((grid) => <Columns {...grid} global={global} span={span} />)}
 </section>

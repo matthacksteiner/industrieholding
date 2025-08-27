@@ -1,6 +1,9 @@
 ---
 import Link from '@components/Link.astro';
-const { global, items, font, align, color, size, gap, metadata } = Astro.props;
+import type { BlockMenuComponentProps } from '../types/components.types';
+
+const { global, items, font, align, color, size, gap, metadata } =
+	Astro.props as BlockMenuComponentProps;
 ---
 
 <div
@@ -19,7 +22,7 @@ const { global, items, font, align, color, size, gap, metadata } = Astro.props;
 							return (
 								<li>
 									<Link
-										link={link}
+										link={link as any}
 										class:list={[
 											`text`,
 											`font--${size}`,

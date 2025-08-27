@@ -2,6 +2,7 @@
 import { toRem } from '@lib/helpers';
 import Link from '@components/Link.astro';
 import CardContent from '@components/CardContent.astro';
+import type { BlockCardComponentProps } from '../types/components.types';
 
 const {
 	title,
@@ -34,14 +35,18 @@ const {
 	cardBorderPaddingDesktop,
 	cardBorderPaddingMobile,
 	metadata,
-} = Astro.props;
-const cardBorderRadiusRem = cardBorderRadius ? toRem(cardBorderRadius) : '0';
-const cardBorderWidthRem = cardBorderWidth ? toRem(cardBorderWidth) : '0';
+} = Astro.props as BlockCardComponentProps;
+const cardBorderRadiusRem = cardBorderRadius
+	? toRem(Number(cardBorderRadius))
+	: '0';
+const cardBorderWidthRem = cardBorderWidth
+	? toRem(Number(cardBorderWidth))
+	: '0';
 const cardBorderPaddingDesktopRem = cardBorderPaddingDesktop
-	? toRem(cardBorderPaddingDesktop)
+	? toRem(Number(cardBorderPaddingDesktop))
 	: '0';
 const cardBorderPaddingMobileRem = cardBorderPaddingMobile
-	? toRem(cardBorderPaddingMobile)
+	? toRem(Number(cardBorderPaddingMobile))
 	: '0';
 
 const cardContentProps = {
@@ -85,7 +90,7 @@ const cardContentProps = {
 >
 	{
 		linkToggle && link && (
-			<Link link={link}>
+			<Link link={link as any}>
 				<CardContent {...cardContentProps} />
 			</Link>
 		)

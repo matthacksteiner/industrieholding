@@ -1,5 +1,6 @@
 ---
 import { toRem } from '@lib/helpers';
+import type { BlockContactFormComponentProps } from '../types/components.types';
 
 const {
 	formName = 'kontakt',
@@ -18,7 +19,7 @@ const {
 	buttonAlign = 'start',
 	global,
 	metadata,
-} = Astro.props;
+} = Astro.props as BlockContactFormComponentProps;
 // Extract field configurations with defaults
 const firstnameConfig = fields.firstname || {};
 const lastnameConfig = fields.lastname || {};
@@ -41,15 +42,15 @@ const buttonFontSize =
 		: global.buttonFontSize;
 const buttonPadding =
 	buttonLocal && buttonSettings
-		? toRem(buttonSettings.buttonpadding)
+		? toRem(buttonSettings.buttonpadding || 0)
 		: toRem(global.buttonPadding);
 const buttonBorderRadius =
 	buttonLocal && buttonSettings
-		? toRem(buttonSettings.buttonborderradius)
+		? toRem(buttonSettings.buttonborderradius || 0)
 		: toRem(global.buttonBorderRadius);
 const buttonBorderWidth =
 	buttonLocal && buttonSettings
-		? toRem(buttonSettings.buttonborderwidth)
+		? toRem(buttonSettings.buttonborderwidth || 0)
 		: toRem(global.buttonBorderWidth);
 
 const buttonTextColor =
@@ -110,7 +111,7 @@ const alignClass = {
 		data-netlify-honeypot={spamProtection === 'honeypot'
 			? 'bot-field'
 			: undefined}
-		action={successPage?.url || '/'}
+		action={successPage?.href || successPage?.uri || '/'}
 		class:list={[
 			'contact-form',
 			widthClass,
@@ -119,7 +120,7 @@ const alignClass = {
 			`font--${textSize}`,
 			`text--${textColor}`,
 		]}
-		data-success-inline={!successPage?.url}
+		data-success-inline={!(successPage?.href || successPage?.uri)}
 		data-subject={emailSubject}
 	>
 		<!-- Hidden fields for Netlify -->
@@ -287,7 +288,7 @@ const alignClass = {
 			<div
 				class:list={[
 					'form-submit',
-					buttonAlign === 'start' || buttonAlign === 'normal'
+					buttonAlign === 'start'
 						? 'text-left'
 						: buttonAlign === 'center'
 						? 'text-center'

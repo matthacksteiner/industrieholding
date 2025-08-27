@@ -1,5 +1,6 @@
 ---
 import { toRem } from '@lib/helpers';
+import type { BlockDividerComponentProps } from '../types/components.types';
 
 const {
 	global,
@@ -7,13 +8,19 @@ const {
 	spacingMobileBottom,
 	spacingDesktopTop,
 	spacingDesktopBottom,
-} = Astro.props;
+	metadata,
+} = Astro.props as BlockDividerComponentProps;
 
 const gridBlockMobile = toRem(global.gridBlockMobile) || '1rem';
 const gridBlockDesktop = toRem(global.gridBlockDesktop) || '1rem';
 ---
 
-<div class="blockDivider blocks"></div>
+<div
+	id={metadata?.identifier || undefined}
+	class:list={['blockDivider', 'blocks', metadata?.classes]}
+	{...metadata?.attributes}
+>
+</div>
 
 <style
 	lang="css"

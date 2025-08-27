@@ -1,5 +1,7 @@
 ---
 import ImageComponent from '@components/ImageComponent.astro';
+import type { BlockImageComponentProps } from '../types/components.types';
+
 const {
 	global,
 	image,
@@ -9,7 +11,7 @@ const {
 	backgroundContainer,
 	metadata,
 	aboveFold,
-} = Astro.props;
+} = Astro.props as BlockImageComponentProps;
 
 const loadingStrategy = aboveFold ? 'eager' : 'lazy';
 ---
