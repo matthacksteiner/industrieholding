@@ -73,7 +73,14 @@ const getCommonClasses = (item, isActive, isLast) => [
 				path === `/${effectiveLang}` ||
 				path === `/${effectiveLang}/`;
 			const isAnchorLink = !!item.hash;
-			const isActive = !(isHomepage && isAnchorLink) && path.includes(item.uri);
+
+			// Check for exact path match (with or without trailing slash)
+			const normalizedPath = path.replace(/\/$/, ''); // Remove trailing slash
+			const expectedPath = shouldIncludeLanguage ? `/${effectiveLang}/${item.uri}` : `/${item.uri}`;
+			const normalizedExpectedPath = expectedPath.replace(/\/$/, ''); // Remove trailing slash
+
+			const isActive = !(isHomepage && isAnchorLink) &&
+				(normalizedPath === normalizedExpectedPath || normalizedPath === `/${item.uri}`);
 
 			const isLast = translations.length === 0 && index === links.length - 1;
 
