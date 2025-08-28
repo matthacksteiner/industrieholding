@@ -74,13 +74,23 @@ const getCommonClasses = (item, isActive, isLast) => [
 				path === `/${effectiveLang}/`;
 			const isAnchorLink = !!item.hash;
 
-			// Check for exact path match (with or without trailing slash)
-			const normalizedPath = path.replace(/\/$/, ''); // Remove trailing slash
-			const expectedPath = shouldIncludeLanguage ? `/${effectiveLang}/${item.uri}` : `/${item.uri}`;
-			const normalizedExpectedPath = expectedPath.replace(/\/$/, ''); // Remove trailing slash
+			// Modern hierarchical path matching - elegant solution using startsWith
+			const normalizePath = (pathStr) => {
+				// Remove trailing slash for consistent comparison, but preserve root "/"
+				return pathStr === '/' ? '/' : pathStr.replace(/\/$/, '');
+			};
 
-			const isActive = !(isHomepage && isAnchorLink) &&
-				(normalizedPath === normalizedExpectedPath || normalizedPath === `/${item.uri}`);
+			const currentPath = normalizePath(path);
+			const expectedPath = shouldIncludeLanguage ? `/${effectiveLang}/${item.uri}` : `/${item.uri}`;
+			const normalizedExpectedPath = normalizePath(expectedPath);
+			const alternativeExpectedPath = normalizePath(`/${item.uri}`);
+
+			// Check for hierarchical match: exact match OR current path starts with expected path + '/'
+			const isExactMatch = currentPath === normalizedExpectedPath || currentPath === alternativeExpectedPath;
+			const isParentMatch = currentPath.startsWith(normalizedExpectedPath + '/') ||
+								 currentPath.startsWith(alternativeExpectedPath + '/');
+
+			const isActive = !(isHomepage && isAnchorLink) && (isExactMatch || isParentMatch);
 
 			const isLast = translations.length === 0 && index === links.length - 1;
 
