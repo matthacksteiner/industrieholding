@@ -58,7 +58,7 @@ const loadingStrategy = aboveFold ? 'eager' : 'lazy';
 							ratioMobile={ratioMobile}
 							ratioDesktop={ratioDesktop}
 							span={itemSpan}
-							lightbox={lightbox}
+							{...(lightbox !== undefined ? { lightbox } : {})}
 							backgroundContainer={backgroundContainer}
 							aboveFold={aboveFold}
 						/>
@@ -110,21 +110,4 @@ const loadingStrategy = aboveFold ? 'eager' : 'lazy';
 	.blockGallery[data-layouttype='masonry'] .gallery-item {
 		@apply mb-4 break-inside-avoid;
 	}
-
-	.medium-zoom-overlay,
-	.medium-zoom-image--opened {
-		z-index: 999;
-	}
 </style>
-
-<script>
-	import mediumZoom from 'medium-zoom';
-
-	document.addEventListener('DOMContentLoaded', () => {
-		mediumZoom('[data-zoomable]', {
-			margin: 24,
-			background: 'rgba(0, 0, 0, 0.8)',
-			scrollOffset: 40,
-		});
-	});
-</script>

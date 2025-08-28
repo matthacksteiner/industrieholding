@@ -48,7 +48,11 @@ const pictureProps = {
 const gridBlockMobile = toRem(global.gridBlockMobile) || '1rem';
 const gridBlockDesktop = toRem(global.gridBlockDesktop) || '1rem';
 const link = image.linkexternal;
-const shouldApplyZoom = lightbox && !image.linktoggle;
+// Block-level lightbox setting takes priority over file-level settings
+const shouldApplyZoom =
+	lightbox !== undefined
+		? lightbox && !image.linktoggle // Use block-level setting if explicitly set
+		: image.lightbox && !image.linktoggle; // Fall back to file-level setting
 
 // Dynamic overlay settings from image data
 const captionoverlay = image.captionoverlay;
@@ -106,4 +110,28 @@ const overlayColor = image.captionColor || '#000000';
 	.overlay:hover:before {
 		@apply opacity-0;
 	}
+
+	/* Medium Zoom Lightbox Styles */
+	.medium-zoom-overlay,
+	.medium-zoom-image--opened {
+		z-index: 999;
+	}
 </style>
+
+<script>
+	import mediumZoom from 'medium-zoom';
+
+	// Initialize lightbox only once globally to avoid conflicts
+	document.addEventListener('DOMContentLoaded', () => {
+		// Check if lightbox is already initialized to prevent double initialization
+		if (!document.body.hasAttribute('data-medium-zoom-initialized')) {
+			document.body.setAttribute('data-medium-zoom-initialized', 'true');
+
+			mediumZoom('[data-zoomable]', {
+				margin: 24,
+				background: 'rgba(0, 0, 0, 0.8)',
+				scrollOffset: 40,
+			});
+		}
+	});
+</script>

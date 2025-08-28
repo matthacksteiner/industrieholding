@@ -9,6 +9,7 @@ const {
 	ratioDesktop,
 	span,
 	backgroundContainer,
+	lightbox,
 	metadata,
 	aboveFold,
 } = Astro.props as BlockImageComponentProps;
@@ -30,6 +31,7 @@ const loadingStrategy = aboveFold ? 'eager' : 'lazy';
 				ratioMobile={ratioMobile}
 				ratioDesktop={ratioDesktop}
 				backgroundContainer={backgroundContainer}
+				{...(lightbox ? { lightbox } : {})}
 				span={span}
 				aboveFold={aboveFold}
 			/>

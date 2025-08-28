@@ -209,6 +209,7 @@ export interface BlockImageComponentProps {
 	ratioDesktop?: string;
 	span?: number;
 	backgroundContainer?: boolean;
+	lightbox?: boolean;
 	aboveFold?: boolean;
 	metadata?: MetadataProps;
 }
