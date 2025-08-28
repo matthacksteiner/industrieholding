@@ -1,6 +1,9 @@
 ---
+import type { PaginationComponentProps } from '../types/components.types';
 import { toRem } from '@lib/helpers';
-const { global, length, currentPage, firstUrl, prevUrl, nextUrl } = Astro.props;
+
+const { global, length, currentPage, firstUrl, prevUrl, nextUrl } =
+	Astro.props as PaginationComponentProps;
 const paginationFont = global.paginationFont;
 const size = global.paginationFontSize;
 const paginationPadding = toRem(global.paginationPadding);

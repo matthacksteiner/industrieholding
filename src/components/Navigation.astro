@@ -1,4 +1,5 @@
 ---
+import type { NavigationComponentProps } from '../types/components.types';
 import type { NavigationProps } from '../types';
 import type { GlobalData } from '../types';
 import NavLinks from '@components/NavLinks.astro';
@@ -19,7 +20,7 @@ interface Props {
 	};
 }
 
-const { data, global } = Astro.props;
+const { data, global } = Astro.props as NavigationComponentProps;
 const logoAlign = global.logoAlign;
 ---
 

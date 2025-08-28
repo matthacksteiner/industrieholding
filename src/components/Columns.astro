@@ -1,7 +1,9 @@
 ---
+import type { ColumnsComponentProps } from '../types/components.types';
 import Blocks from '@components/Blocks.astro';
+
 const { columns, global, backgroundPadding, backgroundContainer, data } =
-	Astro.props;
+	Astro.props as ColumnsComponentProps;
 ---
 
 {

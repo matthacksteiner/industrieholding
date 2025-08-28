@@ -1,4 +1,6 @@
 ---
+import type { ImageCopyrightComponentProps } from '../types/components.types';
+
 const {
 	copyrighttitle: copyrightTitle,
 	copyrighttextfont: copyrightTextFont,
@@ -6,7 +8,7 @@ const {
 	copyrighttextcolor: copyrightTextColor,
 	copyrightposition: copyrightPosition,
 	copyrighbackgroundcolor: copyrightBackgroundColor,
-} = Astro.props;
+} = Astro.props as ImageCopyrightComponentProps;
 
 let positionClasses = '';
 switch (copyrightPosition) {

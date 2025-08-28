@@ -1,4 +1,5 @@
 ---
+import type { ImageComponentComponentProps } from '../types/components.types';
 import { toRem } from '@lib/helpers';
 import Picture from '@components/Picture.astro';
 import ImageCaption from '@components/ImageCaption.astro';
@@ -16,7 +17,7 @@ const {
 	lightbox,
 	aboveFold,
 	isFirstSlide,
-} = Astro.props;
+} = Astro.props as ImageComponentComponentProps;
 
 const pictureProps = {
 	src: image.url,

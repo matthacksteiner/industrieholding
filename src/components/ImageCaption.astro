@@ -1,5 +1,7 @@
 ---
+import type { ImageCaptionComponentProps } from '../types/components.types';
 import { toRem } from '@lib/helpers';
+
 const {
 	global,
 	captiontitle: captionTitle,
@@ -8,7 +10,7 @@ const {
 	captiontextcolor: captionTextColor,
 	captiontextalign: captionTextAlign,
 	captionalign: captionAlign,
-} = Astro.props;
+} = Astro.props as ImageCaptionComponentProps;
 
 const gridBlockMobile = toRem(global.gridBlockMobile) || '1rem';
 const gridBlockDesktop = toRem(global.gridBlockDesktop) || '1rem';

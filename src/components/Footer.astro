@@ -1,6 +1,7 @@
 ---
+import type { FooterComponentProps } from '../types/components.types';
 import Layouts from '@components/Layouts.astro';
-const { data, global } = Astro.props;
+const { data, global } = Astro.props as FooterComponentProps;
 ---
 
 <footer>

@@ -108,6 +108,159 @@ export interface SectionImageProps extends BaseComponentProps {
 	backgroundContainer?: string;
 }
 
+// Component Props
+export interface CardContentComponentProps {
+	title?: string;
+	text?: string;
+	image?: any;
+	hovertoggle?: boolean;
+	hovertext?: string;
+	justify?: string;
+	Level?: string;
+	titleSize?: string;
+	titleAlign?: string;
+	textSize?: string;
+	textAlign?: string;
+	widthMobile?: string;
+	widthDesktop?: string;
+	widthAlign?: string;
+}
+
+export interface ColumnsComponentProps {
+	columns: Array<{
+		id: string;
+		width: number;
+		span: number;
+		nested: boolean;
+		blocks: any[];
+	}>;
+	global: any;
+	span?: number;
+	backgroundContainer?: boolean;
+}
+
+export interface CookieConsentComponentProps {
+	global: any;
+}
+
+export interface FooterComponentProps {
+	data: any;
+	global: any;
+}
+
+export interface HamburgerComponentProps {
+	data: any;
+	global: any;
+}
+
+export interface HeaderComponentProps {
+	global: any;
+	data: any;
+	lang: string;
+}
+
+export interface ImageCaptionComponentProps {
+	caption?: string;
+	copyright?: string;
+	align?: string;
+	controls?: string[];
+	overlayRange?: number;
+	color?: string;
+}
+
+export interface ImageComponentComponentProps {
+	global: any;
+	image: any;
+	ratioMobile?: string;
+	ratioDesktop?: string;
+	span?: number;
+	backgroundContainer?: boolean;
+	lightbox?: boolean;
+	aboveFold?: boolean;
+}
+
+export interface ImageCopyrightComponentProps {
+	content?: string;
+	align?: string;
+	color?: string;
+}
+
+export interface KirbyMetaComponentProps {
+	data: any;
+	global: any;
+	lang: string;
+}
+
+export interface LanguagePickerComponentProps {
+	global: any;
+	class?: string;
+	font?: string;
+}
+
+export interface LayoutsComponentProps {
+	layouts: any[];
+	data: any;
+	global: any;
+}
+
+export interface NavLinksComponentProps {
+	links: Array<{
+		label: string;
+		href: string;
+		active?: boolean;
+		children?: Array<{
+			label: string;
+			href: string;
+		}>;
+	}>;
+	global: any;
+	data: any;
+}
+
+export interface NavigationComponentProps {
+	data: any;
+	global: any;
+}
+
+export interface PageRendererComponentProps {
+	slug: string;
+	lang?: string;
+	data?: any;
+	global?: any;
+	page?: any;
+}
+
+export interface PaginationComponentProps {
+	data: any;
+	global: any;
+	lang: string;
+}
+
+export interface PreviewErrorComponentProps {
+	slug: string;
+	lang: string;
+	error: any;
+}
+
+export interface ScrollButtonComponentProps {
+	global: any;
+}
+
+export interface SectionComponentProps {
+	item: any;
+	global: any;
+	lang: string;
+}
+
+export interface VectorImageComponentProps {
+	image: any;
+	widthMobile?: string;
+	widthDesktop?: string;
+	widthAlign?: string;
+	noLink?: boolean | string;
+	class?: string;
+}
+
 // ========================================
 // BLOCK COMPONENT PROPS
 // ========================================

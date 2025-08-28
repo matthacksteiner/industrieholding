@@ -1,4 +1,5 @@
 ---
+import type { SectionImageComponentProps } from '../types/components.types';
 import { toRem } from '@lib/helpers';
 import ImageComponent from '@components/ImageComponent.astro';
 import type { SectionImageProps } from '../types';
@@ -32,7 +33,7 @@ const {
 	textContentClass = 'text-content',
 	lang,
 	backgroundContainer = 'container',
-} = Astro.props;
+} = Astro.props as SectionImageComponentProps;
 
 const TitleLevel = titleLevel;
 const gridBlockMobile = toRem(global.gridBlockMobile) || '1rem';

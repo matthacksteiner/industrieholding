@@ -1,4 +1,5 @@
 ---
+import type { PageRendererComponentProps } from '../types/components.types';
 import { getPage, getData } from '@lib/api';
 import { isPreviewMode } from '@lib/helpers';
 import type { PageRendererProps, PageData, GlobalData } from '@types';
@@ -8,7 +9,13 @@ import Section from '@components/Section.astro';
 
 type Props = PageRendererProps;
 
-const { slug, lang, data: propsData, global: propsGlobal, page } = Astro.props;
+const {
+	slug,
+	lang,
+	data: propsData,
+	global: propsGlobal,
+	page,
+} = Astro.props as PageRendererComponentProps;
 
 // Use provided data or fetch it
 let data: PageData;

@@ -1,5 +1,7 @@
 ---
-const { global, class: className } = Astro.props;
+import type { LanguagePickerComponentProps } from '../types/components.types';
+const { global, class: className } =
+	Astro.props as LanguagePickerComponentProps;
 const { lang } = Astro.params;
 import { Icon } from 'astro-icon/components';
 import {

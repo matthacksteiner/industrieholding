@@ -1,4 +1,5 @@
 ---
+import type { CardContentComponentProps } from '../types/components.types';
 import VectorImage from '@components/VectorImage.astro';
 
 const {
@@ -16,7 +17,7 @@ const {
 	widthMobile,
 	widthDesktop,
 	widthAlign,
-} = Astro.props;
+} = Astro.props as CardContentComponentProps;
 ---
 
 <div

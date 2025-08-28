@@ -1,7 +1,9 @@
 ---
+import type { VectorImageComponentProps } from '../types/components.types';
 import { getAltFallback } from '@lib/helpers';
 
-const { image, widthMobile, widthDesktop, noLink, widthAlign } = Astro.props;
+const { image, widthMobile, widthDesktop, noLink, widthAlign } =
+	Astro.props as VectorImageComponentProps;
 const classes = image?.classes;
 const link = image?.linkexternal;
 const imageProps = {

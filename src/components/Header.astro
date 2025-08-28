@@ -1,4 +1,5 @@
 ---
+import type { HeaderComponentProps } from '../types/components.types';
 import { toRem, isPreviewMode } from '@lib/helpers';
 import Button from '@blocks/BlockButton.astro';
 import VectorImage from '@components/VectorImage.astro';
@@ -7,7 +8,7 @@ import Navigation from '@components/Navigation.astro';
 import LanguagePicker from '@components/LanguagePicker.astro';
 import { Icon } from 'astro-icon/components';
 
-const { global, data, lang } = Astro.props;
+const { global, data, lang } = Astro.props as HeaderComponentProps;
 
 const headerActive = global.headerActive;
 const headerColor = global.headerColor;

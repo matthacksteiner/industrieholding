@@ -1,8 +1,10 @@
 ---
+import type { CookieConsentComponentProps } from '../types/components.types';
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import { Icon } from 'astro-icon/components';
+
 const { googleAnalyticsToggle, googleAnalyticsCode, global, lang } =
-	Astro.props;
+	Astro.props as CookieConsentComponentProps;
 const toggle = googleAnalyticsToggle ? 'true' : 'false';
 
 const analyticsLink = global?.analyticsLink?.uri || '/datenschutz';

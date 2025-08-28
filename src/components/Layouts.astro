@@ -1,7 +1,13 @@
 ---
+import type { LayoutsComponentProps } from '../types/components.types';
 import Columns from '@components/Columns.astro';
 import ScrollButton from '@components/ScrollButton.astro';
-const { global, layouts, class: className, data } = Astro.props;
+const {
+	global,
+	layouts,
+	class: className,
+	data,
+} = Astro.props as LayoutsComponentProps;
 ---
 
 {

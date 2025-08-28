@@ -1,10 +1,11 @@
 ---
+import type { SectionComponentProps } from '../types/components.types';
 import { toRem } from '@lib/helpers';
 import Layouts from '@components/Layouts.astro';
 import SectionImage from '@components/SectionImage.astro';
 import Pagination from '@components/Pagination.astro';
 
-const { data, global, page } = Astro.props;
+const { data, global, page } = Astro.props as SectionComponentProps;
 const { lang } = Astro.params;
 const { settings } = data;
 

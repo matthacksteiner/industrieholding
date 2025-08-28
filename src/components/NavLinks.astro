@@ -1,9 +1,10 @@
 ---
+import type { NavLinksComponentProps } from '../types/components.types';
 import Button from '@blocks/BlockButton.astro';
 import { isPreviewMode } from '@lib/helpers';
 
 // Props and parameters
-const { data, global, links } = Astro.props;
+const { data, global, links } = Astro.props as NavLinksComponentProps;
 const { lang } = Astro.params;
 const path = Astro.url.pathname;
 

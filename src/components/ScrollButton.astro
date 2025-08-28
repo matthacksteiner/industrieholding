@@ -1,4 +1,5 @@
 ---
+import type { ScrollButtonComponentProps } from '../types/components.types';
 import type { BaseComponentProps } from '@types';
 
 interface Props extends BaseComponentProps {
@@ -7,7 +8,7 @@ interface Props extends BaseComponentProps {
 	size?: 'Klein' | 'Mittel' | 'Groß';
 }
 
-const { controls, color, size } = Astro.props;
+const { controls, color, size } = Astro.props as ScrollButtonComponentProps;
 ---
 
 {
