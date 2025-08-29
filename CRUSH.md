@@ -54,3 +54,10 @@
 - Keep components small and reusable
 - Follow accessibility guidelines
 - Optimize for Core Web Vitals
+
+## Additional Notes
+
+- The Astro frontend consumes JSON content from the Kirby CMS backend
+- Content synchronization happens via the astro-kirby-sync plugin
+- Images are processed with Cloudinary through the astro-cloudinary plugin
+- Critical CSS and other optimizations are enabled in production builds
