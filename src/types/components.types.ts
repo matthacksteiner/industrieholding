@@ -19,6 +19,34 @@ export interface BaseComponentProps {
 	id?: string;
 }
 
+// Link Component Types
+export interface BaseLink {
+	type: 'url' | 'page' | 'file' | 'email' | 'tel';
+	href: string;
+	title?: string;
+	popup?: boolean;
+}
+
+export interface PageLink extends BaseLink {
+	type: 'page';
+	uri: string;
+	hash?: string;
+}
+
+export interface FileLink extends BaseLink {
+	type: 'file';
+	uri: string; // File links use uri property for the actual file URL
+	downloadFilename?: string;
+}
+
+export interface LinkComponentProps {
+	// Required props
+	link: BaseLink | PageLink | FileLink;
+
+	// Optional props
+	class?: string;
+}
+
 // Layout Components
 export interface LayoutProps extends BaseComponentProps {
 	title?: string;

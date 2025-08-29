@@ -20,31 +20,14 @@
  * ```
  */
 
-interface BaseLink {
-	type: 'url' | 'page' | 'file' | 'email' | 'tel';
-	href: string;
-	title?: string;
-	popup?: boolean;
-}
+import type {
+	BaseLink,
+	PageLink,
+	FileLink,
+	LinkComponentProps,
+} from '../types/components.types';
 
-interface PageLink extends BaseLink {
-	type: 'page';
-	uri: string;
-	hash?: string;
-}
-
-interface FileLink extends BaseLink {
-	type: 'file';
-	downloadFilename?: string;
-}
-
-interface Props {
-	// Required props
-	link: BaseLink | PageLink | FileLink;
-
-	// Optional props
-	class?: string;
-}
+interface Props extends LinkComponentProps {}
 
 const { link, class: className, ...rest } = Astro.props;
 const { lang } = Astro.params;
@@ -61,6 +44,10 @@ if (!link.type) {
 
 if (link.type === 'page' && !('uri' in link)) {
 	throw new Error('Page links must include a uri property');
+}
+
+if (link.type === 'file' && !('uri' in link) && !link.href) {
+	throw new Error('File links must include either a uri or href property');
 }
 
 let href = '';
@@ -91,7 +78,7 @@ switch (link.type) {
 		}
 		break;
 	case 'file':
-		href = link.href;
+		href = (link as FileLink).uri || link.href;
 		break;
 	case 'email':
 		href = link.href;
