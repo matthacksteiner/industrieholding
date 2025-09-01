@@ -8,7 +8,7 @@ src/
   components/    - Reusable UI components (buttons, cards, navigation, etc.)
   config/        - Configuration files (e.g., screen sizes, site metadata)
   icons/         - SVG icons, typically used with a library like astro-icon
-  layouts/       - Page layout templates that define the structure of different page types
+  layouts/       - Page layout templates (BaseLayout.astro, MaintenanceLayout.astro)
   lib/           - Utility functions, helpers, and client-side scripts
   overrides/     - Custom overrides for project-specific implementations or third-party library styling
   pages/         - File-based routing system; Astro uses files in this directory to generate pages and routes

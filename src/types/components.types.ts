@@ -104,6 +104,7 @@ export interface PageRendererProps {
 	data?: PageData;
 	global?: GlobalData;
 	page?: any;
+	maintenanceMode?: boolean;
 }
 
 // Section Components
@@ -256,6 +257,7 @@ export interface PageRendererComponentProps {
 	data?: any;
 	global?: any;
 	page?: any;
+	maintenanceMode?: boolean;
 }
 
 export interface PaginationComponentProps {

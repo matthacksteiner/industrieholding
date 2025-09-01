@@ -33,6 +33,7 @@ The `astro-kirby-sync` plugin (and potentially the preview route) interacts with
       - Navigation structure (main menu, footer menu).
       - Language configuration: default language, available translations.
       - Font definitions (used by the `font-downloader` plugin).
+      - **Maintenance mode toggle**: `maintenanceToggle` field from the maintenance page.
       - Other global settings.
 
 2.  **Index/Listing Data**: `/{KIRBY_URL}/index.json` (and `/{KIRBY_URL}/{lang}/index.json`)

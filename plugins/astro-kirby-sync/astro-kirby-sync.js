@@ -217,6 +217,37 @@ async function performIncrementalLanguageSync(
 		}
 	}
 
+	// Check if we're in maintenance mode by looking at global data
+	const isMaintenanceMode = globalData?.maintenanceToggle === true;
+
+	if (isMaintenanceMode) {
+		logger.info(
+			chalk.yellow(
+				`🚧 Maintenance mode detected - syncing only maintenance page`
+			)
+		);
+
+		// In maintenance mode, clean up all other content files except essential ones
+		const essentialFiles = [
+			'global.json',
+			'index.json',
+			'maintenance.json',
+			'error.json',
+		];
+		const allFiles = fs.readdirSync(langDir);
+		for (const file of allFiles) {
+			if (file.endsWith('.json') && !essentialFiles.includes(file)) {
+				const filePath = path.join(langDir, file);
+				try {
+					fs.unlinkSync(filePath);
+					logger.info(chalk.gray(`  ↳ Removed ${file} from ${lang || 'root'}`));
+				} catch (error) {
+					// Ignore errors when removing files
+				}
+			}
+		}
+	}
+
 	// Check each page in the index
 	for (const page of indexData) {
 		const pageUrl = `${API_URL}/${langPath}${page.uri}.json`;

@@ -7,6 +7,7 @@ This documentation covers the Astro frontend template for the Baukasten CMS syst
 - [Project Structure](project-structure.md) - Overview of the Astro template structure
 - [Components and Blocks](components-blocks.md) - **Complete guide for creating new blocks**
 - [Content Management and API](content-management-api.md) - CMS integration
+- [Maintenance Mode](maintenance-mode.md) - **Site-wide maintenance functionality**
 - [Routing](routing.md) - Dynamic routing and page generation
 - [Internationalization](internationalization.md) - Multi-language support
 - [Styling](styling.md) - Tailwind CSS and design system
@@ -83,6 +84,7 @@ if (!toggle) {
 ## Key Features
 
 - **Block-based Architecture**: Flexible content blocks from Kirby CMS
+- **Maintenance Mode**: Site-wide maintenance with CMS-managed content
 - **TypeScript Support**: Full type safety throughout the codebase
 - **Multi-language**: Built-in internationalization support
 - **Performance Optimized**: Image optimization, lazy loading, prefetching

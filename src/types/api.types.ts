@@ -42,6 +42,7 @@ export interface GlobalData {
 	prefixDefaultLocale: boolean;
 	frontendUrl: string;
 	paginationElements?: number;
+	maintenanceToggle?: boolean;
 	font?: Array<{
 		name: string;
 		url1?: string;

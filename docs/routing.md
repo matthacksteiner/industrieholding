@@ -2,6 +2,16 @@
 
 Astro uses a file-based routing system, meaning the structure of your `src/pages/` directory dictates the routes of your website. This project leverages this system along with dynamic route segments for content-driven pages and multi-language support.
 
+## Middleware
+
+The routing system includes a middleware layer (`src/middleware.ts`) that handles:
+
+- **Maintenance Mode**: Automatically redirects all traffic to `/maintenance` when maintenance mode is active
+- **Path Exclusions**: Certain paths (like `/preview`, `/assets`, `/favicons`) bypass maintenance mode
+- **Global State Checking**: Reads maintenance toggle from CMS data on every request
+
+For detailed maintenance mode functionality, see [Maintenance Mode](maintenance-mode.md).
+
 ## File-Based Routing
 
 - Any `.astro`, `.md`, or `.html` file in `src/pages/` becomes a page on your site.
