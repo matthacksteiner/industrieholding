@@ -12,6 +12,7 @@ export default function astroKirbySync() {
 				// Skip in development mode
 				if (process.env.NODE_ENV === 'development') {
 					logger.info('🔄 Development mode: Skipping content sync');
+					logger.warn('🚧 Maintenance mode is bypassed in development');
 					return;
 				}
 

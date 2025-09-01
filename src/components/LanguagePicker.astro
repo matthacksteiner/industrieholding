@@ -28,11 +28,8 @@ const headerColor = global.headerColor;
 const headerBackground = global.headerBackground;
 
 // Parse the current URL pathname
-const pathname = new URL(Astro.request.url).pathname.split('/').filter(Boolean);
-const isHome = checkIsHome({
-	url: { pathname: Astro.url.pathname },
-	currentLocale: currentLang,
-});
+const pathname = Astro.url.pathname.split('/').filter(Boolean);
+const isHome = checkIsHome(Astro);
 
 // Get current page slug
 const currentPageSlug = extractPageSlug({

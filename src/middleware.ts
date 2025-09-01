@@ -27,6 +27,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
 		return next();
 	}
 
+	// Skip maintenance mode check during development and prerendering
+	// to avoid Astro.request.headers warnings
+	if (import.meta.env.DEV) {
+		// In development mode, maintenance mode is disabled to avoid header warnings
+		return next();
+	}
+
 	try {
 		// Get global data to check maintenance mode
 		const globalData = await getData<GlobalData>('/global.json');

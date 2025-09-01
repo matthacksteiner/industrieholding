@@ -522,6 +522,9 @@ export default {
 			console.log(
 				chalk.gray('Content will be fetched directly from the CMS API')
 			);
+			console.log(
+				chalk.yellow('🚧 Maintenance mode is bypassed in development')
+			);
 			return;
 		}
 

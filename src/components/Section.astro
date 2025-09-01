@@ -57,7 +57,7 @@ const gapHorizontalMobileValue = toRem(gapHorizontalMobile);
 const gridBlockMobile = toRem(global.gridBlockMobile);
 const gridBlockDesktop = toRem(global.gridBlockDesktop);
 
-const pathname = new URL(Astro.request.url).pathname.split('/');
+const pathname = Astro.url.pathname.split('/');
 const translations = global.translations.map((lang) => lang.code);
 const prefixDefaultLocale = global.prefixDefaultLocale;
 const currentLang = data.lang;
