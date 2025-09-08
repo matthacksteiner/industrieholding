@@ -1,5 +1,5 @@
 ---
-import type { NavLinksComponentProps } from '../types/components.types';
+import type { NavLinksComponentProps } from '@app-types/components.types';
 import Button from '@blocks/BlockButton.astro';
 import { isPreviewMode } from '@lib/helpers';
 
@@ -96,7 +96,7 @@ const getCommonClasses = (item, isActive, isLast) => [
 			const isLast = translations.length === 0 && index === links.length - 1;
 
 			// Render appropriate component
-			if (item.classes.includes('cta')) {
+    if (item.classes?.includes('cta')) {
 				return (
 					<Button
 						link={{ ...item, href }}

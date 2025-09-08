@@ -10,7 +10,7 @@ import type {
 	FontSizeItem,
 	PageData,
 	SectionData,
-} from '../types';
+} from '@app-types';
 
 // Re-export types for backward compatibility
 export type {

@@ -3,7 +3,7 @@ import type {
 	GlobalData,
 	SectionItem,
 	ContentBlock,
-} from './api.types';
+} from '@app-types/api.types';
 import type {
 	LinkArray,
 	ImageArray,
@@ -11,7 +11,7 @@ import type {
 	ButtonSettings,
 	ButtonColors,
 	MetadataProps,
-} from './blocks.types';
+} from '@app-types/blocks.types';
 
 // Common Component Props
 export interface BaseComponentProps {
@@ -166,10 +166,15 @@ export interface ColumnsComponentProps {
 	global: any;
 	span?: number;
 	backgroundContainer?: boolean;
+	backgroundPadding?: 'left' | 'right' | 'none' | string;
+	data?: any;
 }
 
 export interface CookieConsentComponentProps {
 	global: any;
+	googleAnalyticsToggle?: boolean;
+	googleAnalyticsCode?: string;
+	lang: string;
 }
 
 export interface FooterComponentProps {
@@ -195,6 +200,13 @@ export interface ImageCaptionComponentProps {
 	controls?: string[];
 	overlayRange?: number;
 	color?: string;
+	global?: any;
+	captiontitle?: string;
+	captiontextfont?: string;
+	captiontextsize?: string;
+	captiontextcolor?: string;
+	captiontextalign?: string;
+	captionalign?: string;
 }
 
 export interface ImageComponentComponentProps {
@@ -202,22 +214,31 @@ export interface ImageComponentComponentProps {
 	image: any;
 	ratioMobile?: string;
 	ratioDesktop?: string;
+	loading?: 'auto' | 'eager' | 'lazy';
 	span?: number;
 	backgroundContainer?: boolean;
 	lightbox?: boolean;
 	aboveFold?: boolean;
+	isFirstSlide?: boolean;
 }
 
 export interface ImageCopyrightComponentProps {
 	content?: string;
 	align?: string;
 	color?: string;
+	copyrighttitle?: string;
+	copyrighttextfont?: string;
+	copyrighttextsize?: string;
+	copyrighttextcolor?: string;
+	copyrightposition?: string;
+	copyrighbackgroundcolor?: string;
 }
 
 export interface KirbyMetaComponentProps {
 	data: any;
 	global: any;
 	lang: string;
+	pageTitle?: string;
 }
 
 export interface LanguagePickerComponentProps {
@@ -230,6 +251,7 @@ export interface LayoutsComponentProps {
 	layouts: any[];
 	data: any;
 	global: any;
+	class?: string;
 }
 
 export interface NavLinksComponentProps {
@@ -241,6 +263,12 @@ export interface NavLinksComponentProps {
 			label: string;
 			href: string;
 		}>;
+		uri?: string;
+		title?: string;
+		classes?: string[];
+		hash?: string;
+		type?: string;
+		popup?: boolean;
 	}>;
 	global: any;
 	data: any;
@@ -264,22 +292,34 @@ export interface PaginationComponentProps {
 	data: any;
 	global: any;
 	lang: string;
+	length?: number;
+	currentPage?: number;
+	firstUrl?: string;
+	prevUrl?: string;
+	nextUrl?: string;
 }
 
 export interface PreviewErrorComponentProps {
 	slug: string;
 	lang: string;
 	error: any;
+	title?: string;
+	message?: string;
 }
 
 export interface ScrollButtonComponentProps {
 	global: any;
+	controls?: string[];
+	color?: string;
+	size?: string;
 }
 
 export interface SectionComponentProps {
 	item: any;
 	global: any;
 	lang: string;
+	data?: any;
+	page?: any;
 }
 
 export interface VectorImageComponentProps {

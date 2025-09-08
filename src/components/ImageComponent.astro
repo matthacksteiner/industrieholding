@@ -1,5 +1,5 @@
 ---
-import type { ImageComponentComponentProps } from '../types/components.types';
+import type { ImageComponentComponentProps } from '@app-types/components.types';
 import { toRem } from '@lib/helpers';
 import Picture from '@components/Picture.astro';
 import ImageCaption from '@components/ImageCaption.astro';
@@ -19,6 +19,7 @@ const {
 	isFirstSlide,
 } = Astro.props as ImageComponentComponentProps;
 
+// Picture component props (type-safe)
 const pictureProps = {
 	src: image.url,
 	urlFocus: image.urlFocus,
@@ -30,15 +31,16 @@ const pictureProps = {
 	id: image.identifier,
 	ratioMobile: ratioMobile || 'original',
 	ratioDesktop: ratioDesktop || 'original',
-	backgroundContainer: backgroundContainer,
-	loading: loading,
-	span: span || 6,
-	lightbox: lightbox,
+	backgroundContainer: (backgroundContainer ? 'full' : 'container') as
+		| 'container'
+		| 'full',
+	loading: loading as 'lazy' | 'eager' | undefined,
+	span: String(span || 6),
 	gridGapMobile: global.gridGapMobile || 0,
 	gridMarginMobile: global.gridMarginMobile || 0,
 	gridGapDesktop: global.gridGapDesktop || 0,
 	gridMarginDesktop: global.gridMarginDesktop || 0,
-	positon: 'relative',
+	position: 'center' as const,
 	class: image.classes
 		? `${image.classes} w-full object-cover`
 		: 'w-full object-cover',

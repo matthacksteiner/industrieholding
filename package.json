@@ -8,6 +8,7 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
+		"lint": "astro check",
 		"test": "vitest",
 		"test:sync": "node plugins/astro-kirby-sync/test-incremental-sync.js",
 		"clean": "rimraf public/content",
@@ -15,6 +16,7 @@
 		"clean-dev": "npm run clean && npm run dev"
 	},
 	"dependencies": {
+		"@astrojs/check": "^0.9.4",
 		"@astrojs/netlify": "^6.5.9",
 		"@astrojs/tailwind": "^6.0.2",
 		"@iarna/toml": "^2.2.5",
@@ -27,6 +29,7 @@
 		"swiper": "^9.2.3",
 		"tailwindcss": "^3.2.4",
 		"tailwindcss-delicious-hamburgers": "^1.0.3",
+		"typescript": "^5.9.2",
 		"vanilla-cookieconsent": "^3.0.0"
 	},
 	"devDependencies": {

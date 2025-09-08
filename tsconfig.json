@@ -39,6 +39,12 @@
       ],
       "@public/*": [
         "public/*"
+      ],
+      "@app-types": [
+        "src/types"
+      ],
+      "@app-types/*": [
+        "src/types/*"
       ]
     }
   }

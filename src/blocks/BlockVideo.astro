@@ -1,6 +1,7 @@
 ---
 import { CldVideoPlayer } from 'astro-cloudinary';
-import type { BlockVideoComponentProps } from '../types/components.types';
+import type { BlockVideoComponentProps } from '@app-types/components.types';
+import Level from '@components/Level.astro';
 
 const CLOUDINARY_CLOUD_NAME = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
 const {
@@ -18,7 +19,7 @@ const {
 	size,
 	align,
 	textcolor,
-	Level,
+	Level: headingLevel,
 	toggle,
 	metadata,
 	aboveFold,
@@ -156,6 +157,7 @@ const vimeoPlayer =
 			{
 				toggle ? (
 					<Level
+						level={headingLevel}
 						set:html={text}
 						class:list={[
 							`title font--${size}`,

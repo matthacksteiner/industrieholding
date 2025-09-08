@@ -1,6 +1,7 @@
 ---
-import type { CardContentComponentProps } from '../types/components.types';
+import type { CardContentComponentProps } from '@app-types/components.types';
 import VectorImage from '@components/VectorImage.astro';
+import Level from '@components/Level.astro';
 
 const {
 	title,
@@ -9,7 +10,7 @@ const {
 	hovertoggle,
 	hovertext,
 	justify,
-	Level,
+	Level: headingLevel,
 	titleSize,
 	titleAlign,
 	textSize,
@@ -29,6 +30,7 @@ const {
 	{
 		title && (
 			<Level
+				level={headingLevel}
 				class:list={[
 					'card-title',
 					`font--${titleSize}`,

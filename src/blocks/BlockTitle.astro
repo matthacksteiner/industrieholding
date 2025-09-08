@@ -1,8 +1,16 @@
 ---
-import type { BlockTitleComponentProps } from '../types/components.types';
+import type { BlockTitleComponentProps } from '@app-types/components.types';
+import Level from '@components/Level.astro';
 
-const { title, font, size, align, color, Level, metadata } =
-	Astro.props as BlockTitleComponentProps;
+const {
+	title,
+	font,
+	size,
+	align,
+	color,
+	Level: headingLevel,
+	metadata,
+} = Astro.props as BlockTitleComponentProps;
 ---
 
 <div
@@ -11,6 +19,7 @@ const { title, font, size, align, color, Level, metadata } =
 	{...metadata?.attributes}
 >
 	<Level
+		level={headingLevel}
 		class:list={[`font--${size}`, `text--${color}`, `text--${align}`]}
 		set:html={title}
 	/>

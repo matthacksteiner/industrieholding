@@ -1,9 +1,10 @@
 ---
-import type { BlockAccordionComponentProps } from '../types/components.types';
+import type { BlockAccordionComponentProps } from '@app-types/components.types';
+import Level from '@components/Level.astro';
 
 const {
 	items,
-	Level,
+	Level: headingLevel,
 	titleFont,
 	titleColor,
 	titleSize,
@@ -44,7 +45,7 @@ const {
 								class:list={['accordion__button', 'flex', 'w-full', 'items-center', 'justify-between', `font--${titleSize}`, `text--${titleColor}`]}
 								aria-label="Akkordion öffnen oder schließen"
 							>
-								<Level set:html={item.title} class:list={['title', 'text-left']} />
+								<Level level={headingLevel} set:html={item.title} class:list={['title', 'text-left']} />
 								<span class="transition-all duration-300">&#8595;</span>
 							</button>
 							<div class="accordion__panel max-h-0 max-w-[95%] overflow-hidden transition-all duration-300">
@@ -63,7 +64,7 @@ const {
 							<div
 								class:list={['flex', 'w-full', 'items-center', 'justify-between', `font--${titleSize}`, `text--${titleColor}`]}
 							>
-								<Level set:html={item.title} class:list={['title']} />
+								<Level level={headingLevel} set:html={item.title} class:list={['title']} />
 							</div>
 						)}
 					</div>

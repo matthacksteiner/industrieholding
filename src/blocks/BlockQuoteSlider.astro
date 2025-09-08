@@ -1,5 +1,5 @@
 ---
-import type { BlockQuoteSliderComponentProps } from '../types/components.types';
+import type { BlockQuoteSliderComponentProps } from '@app-types/components.types';
 
 const {
 	items,
@@ -103,7 +103,7 @@ const autoplay = hasControl('autoplay');
 			const autoplay = controls?.includes('autoplay');
 			if (time) {
 				const swiperSlider = blockQuoteSlider.querySelector('.swiperSlider');
-				const swiper = new Swiper(swiperSlider, {
+				const swiper = new Swiper(swiperSlider as HTMLElement, {
 					...(autoplay && {
 						autoplay: {
 							delay: parseInt(time),
@@ -112,11 +112,17 @@ const autoplay = hasControl('autoplay');
 					centeredSlidesBounds: true,
 					loop: true,
 					navigation: {
-						nextEl: blockQuoteSlider.querySelector('.swiper-right'),
-						prevEl: blockQuoteSlider.querySelector('.swiper-left'),
+						nextEl: blockQuoteSlider.querySelector(
+							'.swiper-right'
+						) as HTMLElement,
+						prevEl: blockQuoteSlider.querySelector(
+							'.swiper-left'
+						) as HTMLElement,
 					},
 					pagination: {
-						el: blockQuoteSlider.querySelector('.swiper-pagination'),
+						el: blockQuoteSlider.querySelector(
+							'.swiper-pagination'
+						) as HTMLElement,
 						type: 'bullets',
 						clickable: true,
 					},

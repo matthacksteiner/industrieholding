@@ -1,7 +1,8 @@
 ---
 import ImageComponent from '@components/ImageComponent.astro';
 import VectorImage from '@components/VectorImage.astro';
-import type { BlockSliderComponentProps } from '../types/components.types';
+import type { BlockSliderComponentProps } from '@app-types/components.types';
+import Level from '@components/Level.astro';
 
 const {
 	global,
@@ -20,7 +21,7 @@ const {
 	size,
 	align,
 	textcolor,
-	Level,
+	Level: headingLevel,
 	toggle,
 	ratioMobile,
 	ratioDesktop,
@@ -112,6 +113,7 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 				toggle && (
 					<div>
 						<Level
+							level={headingLevel}
 							set:html={text}
 							class:list={[
 								`title`,
@@ -169,11 +171,15 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 					spaceBetween: parseInt(viewPaddingMobile),
 					effect: effect === 'fade' ? 'fade' : 'slide',
 					navigation: {
-						nextEl: blockSlider.querySelector('.swiper-button-next'),
-						prevEl: blockSlider.querySelector('.swiper-button-prev'),
+						nextEl: blockSlider.querySelector(
+							'.swiper-button-next'
+						) as HTMLElement,
+						prevEl: blockSlider.querySelector(
+							'.swiper-button-prev'
+						) as HTMLElement,
 					},
 					pagination: {
-						el: blockSlider.querySelector('.swiper-pagination'),
+						el: blockSlider.querySelector('.swiper-pagination') as HTMLElement,
 						type: line ? 'progressbar' : 'bullets',
 						clickable: true,
 					},
@@ -201,7 +207,7 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 					};
 				}
 
-				const swiper = new Swiper(swiperSlider, swiperOptions);
+				const swiper = new Swiper(swiperSlider as HTMLElement, swiperOptions);
 			}
 		}
 	});

@@ -1,5 +1,5 @@
 ---
-import type { CookieConsentComponentProps } from '../types/components.types';
+import type { CookieConsentComponentProps } from '@app-types/components.types';
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import { Icon } from 'astro-icon/components';
 
@@ -91,9 +91,9 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 								document.head.appendChild(script);
 
 								// Initialize Google Analytics
-								window.dataLayer = window.dataLayer || [];
-								function gtag() {
-									dataLayer.push(arguments);
+								(window as any).dataLayer = (window as any).dataLayer || [];
+								function gtag(...args: any[]) {
+									(window as any).dataLayer.push(args);
 								}
 								gtag('js', new Date());
 								gtag('config', code);

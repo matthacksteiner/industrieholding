@@ -1,7 +1,7 @@
 ---
 import PageRenderer from '@components/PageRenderer.astro';
 import { getPage, getData, getAllPages } from '@lib/api';
-import type { GlobalData, PageData } from '../../types';
+import type { GlobalData, PageData } from '@app-types/api.types';
 
 // Extend the API's PageData interface to include the properties we need
 type PageWithTranslations = PageData & {

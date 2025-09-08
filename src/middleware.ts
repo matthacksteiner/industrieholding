@@ -1,6 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
 import { getData } from '@lib/api';
-import type { GlobalData } from './types';
+import type { GlobalData } from '@app-types';
 
 export const onRequest = defineMiddleware(async (context, next) => {
 	const url = context.url;

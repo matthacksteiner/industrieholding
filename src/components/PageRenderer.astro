@@ -1,8 +1,9 @@
 ---
-import type { PageRendererComponentProps } from '../types/components.types';
+import type { PageRendererComponentProps } from '@app-types/components.types';
 import { getPage, getData } from '@lib/api';
 import { isPreviewMode } from '@lib/helpers';
-import type { PageRendererProps, PageData, GlobalData } from '../types';
+import type { PageRendererProps } from '@app-types/components.types';
+import type { PageData, GlobalData } from '@app-types/api.types';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import MaintenanceLayout from '@layouts/MaintenanceLayout.astro';
 import Layouts from '@components/Layouts.astro';

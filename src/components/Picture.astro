@@ -36,7 +36,7 @@
  * - Production ready: Handles image processing in production via Netlify Image API
  */
 
-import type { ImageProps } from '../types';
+import type { ImageProps } from '@app-types/components.types';
 import { screens } from '@config/screens';
 import { getAltFallback } from '@lib/helpers';
 
@@ -45,9 +45,16 @@ import { getAltFallback } from '@lib/helpers';
 // --------------------------------------
 interface Props extends ImageProps {
 	// Core image properties
+	src: string;
 	urlFocus: string;
 	urlFocusMobile: string;
 	name: string;
+	width: number;
+	height: number;
+	alt?: string;
+	id?: string;
+	class?: string;
+	loading?: 'lazy' | 'eager';
 	ratioMobile: string;
 	ratioDesktop: string;
 	span: string;
