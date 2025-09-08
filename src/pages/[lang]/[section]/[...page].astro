@@ -1,7 +1,7 @@
 ---
 import { getSections, getSection, getData } from '@lib/api';
 import PageRenderer from '@components/PageRenderer.astro';
-import type { GlobalData } from '@types';
+import type { GlobalData } from '../../../types';
 
 export async function getStaticPaths({ paginate }) {
 	// Get all section data directly

@@ -1,7 +1,7 @@
 import path from 'path';
 import { isPreviewMode } from '@lib/helpers';
 import { getGlobal } from '@lib/api';
-import type { FontItem, FontData, FontSizeItem } from '@types';
+import type { FontItem, FontData, FontSizeItem } from '../types';
 
 // Create CSS for font sources
 function createFontCSS(
