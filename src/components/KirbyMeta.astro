@@ -5,9 +5,7 @@ const { data, global, pageTitle } = Astro.props as KirbyMetaComponentProps;
 const socialMeta = data.meta.social;
 const kirbyUrl = global.kirbyUrl;
 const frontendURL = global.frontendUrl;
-// Remove trailing slash from frontendURL to ensure consistent URL construction
 const baseUrl = frontendURL.replace(/\/$/, '');
-// Use current Astro URL pathname for canonical (most reliable)
 const canonicalUrl = new URL(Astro.url.pathname, baseUrl);
 const separators = data.meta.separators || '|';
 const siteTitle = global.siteTitle;
