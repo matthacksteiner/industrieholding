@@ -5,10 +5,10 @@ const { data, global, pageTitle } = Astro.props as KirbyMetaComponentProps;
 const socialMeta = data.meta.social;
 const kirbyUrl = global.kirbyUrl;
 const frontendURL = global.frontendUrl;
-const siteURL = global.siteUrl;
-let canonicalFrontend = data.meta.canonical.replace(siteURL, frontendURL);
-canonicalFrontend = canonicalFrontend.replace(/\/$/, '');
-const canonicalUrl = new URL(Astro.url.pathname, canonicalFrontend);
+// Remove trailing slash from frontendURL to ensure consistent URL construction
+const baseUrl = frontendURL.replace(/\/$/, '');
+// Use current Astro URL pathname for canonical (most reliable)
+const canonicalUrl = new URL(Astro.url.pathname, baseUrl);
 const separators = data.meta.separators || '|';
 const siteTitle = global.siteTitle;
 const orgOrPerson = data.meta.org || data.meta.person;
@@ -29,7 +29,7 @@ const orgOrPerson = data.meta.org || data.meta.person;
 		<meta
 			property={key === 'og:url' ? 'og:url' : key}
 			content={
-				key === 'og:url' ? canonicalFrontend : (value as string).toString()
+				key === 'og:url' ? canonicalUrl.href : (value as string).toString()
 			}
 		/>
 	))
