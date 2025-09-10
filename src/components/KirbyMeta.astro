@@ -6,23 +6,7 @@ const socialMeta = data.meta.social;
 const kirbyUrl = global.kirbyUrl;
 // Use current origin for bulletproof canonical URLs
 const currentOrigin = Astro.url.origin;
-let canonicalUrl: URL;
-
-try {
-	canonicalUrl = new URL(Astro.url.pathname, currentOrigin);
-
-	// Ensure canonical URLs use HTTPS in production (not localhost)
-	if (
-		canonicalUrl.hostname !== 'localhost' &&
-		canonicalUrl.protocol === 'http:'
-	) {
-		canonicalUrl.protocol = 'https:';
-	}
-} catch (error) {
-	// Fallback: use frontend URL from global if URL construction fails
-	const fallbackBase = global.frontendUrl.replace(/\/$/, '');
-	canonicalUrl = new URL(Astro.url.pathname, fallbackBase);
-}
+const canonicalUrl = new URL(Astro.url.pathname, currentOrigin);
 const separators = data.meta.separators || '|';
 const siteTitle = global.siteTitle;
 const orgOrPerson = data.meta.org || data.meta.person;
