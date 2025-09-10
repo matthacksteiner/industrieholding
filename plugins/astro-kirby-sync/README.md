@@ -2,6 +2,36 @@
 
 This plugin synchronizes content from a Kirby CMS installation to your Astro project during build time, enabling static site generation with content from Kirby. **Now with intelligent incremental sync!**
 
+## Dual Architecture
+
+This plugin uses a **two-file architecture** to handle different deployment environments optimally:
+
+### 1. `astro-kirby-sync.js` - Netlify Build Plugin
+
+- **Purpose**: Runs as a Netlify Build Plugin during Netlify deployments
+- **When**: During Netlify's build process (before Astro starts)
+- **Configuration**: Registered in `netlify.toml`
+- **Features**: Incremental sync with caching, `onPreBuild`/`onPostBuild` hooks
+
+### 2. `index.js` - Astro Integration
+
+- **Purpose**: Runs as an Astro Integration for local/non-Netlify builds
+- **When**: During Astro's config setup phase
+- **Configuration**: Added to `astro.config.mjs`
+- **Features**: Full sync for local builds, development mode handling
+
+### Environment Detection
+
+```javascript
+if (process.env.NODE_ENV === 'development') {
+	// Skip sync in development
+} else if (process.env.NETLIFY) {
+	// Let Netlify Build Plugin handle it
+} else {
+	// Local production build - run sync here
+}
+```
+
 ## How it works
 
 1. Fetches content from the Kirby CMS using the `KIRBY_URL` environment variable
@@ -37,10 +67,14 @@ This plugin synchronizes content from a Kirby CMS installation to your Astro pro
 
 ## Usage
 
-Add the plugin to your `astro.config.mjs` file:
+The plugin is configured in two places depending on your deployment environment:
+
+### Astro Integration (astro.config.mjs)
+
+Add the Astro integration to your `astro.config.mjs` file:
 
 ```js
-import astroKirbySync from './plugins/astro-kirby-sync/astro-kirby-sync.js';
+import astroKirbySync from './plugins/astro-kirby-sync/index.js';
 
 // In your Astro config
 export default defineConfig({
@@ -50,6 +84,45 @@ export default defineConfig({
 	],
 });
 ```
+
+### Netlify Build Plugin (netlify.toml)
+
+Register the Netlify Build Plugin in your `netlify.toml` file:
+
+```toml
+[build]
+command = "astro build"
+
+# Register the astro-kirby-sync as a Netlify Build Plugin
+[[plugins]]
+package = "./plugins/astro-kirby-sync"
+```
+
+**Note**: Both configurations are needed! The plugin automatically detects the environment and uses the appropriate entry point.
+
+### Why Two Files?
+
+This dual architecture provides several benefits:
+
+1. **Optimal Performance**:
+
+   - Netlify gets incremental sync with build caching
+   - Local builds get reliable full sync
+
+2. **Proper Timing**:
+
+   - Netlify plugin runs _before_ Astro starts (ensuring content is available)
+   - Astro integration runs during Astro's setup phase
+
+3. **Environment Flexibility**:
+
+   - Works seamlessly on Netlify (with advanced caching)
+   - Works locally without Netlify dependencies
+   - Smart development mode handling
+
+4. **Shared Core Logic**:
+   - Both entry points use the same sync functions
+   - No code duplication, just different integration points
 
 ## Environment Variables
 
