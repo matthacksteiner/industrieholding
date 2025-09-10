@@ -8,7 +8,7 @@ publish = "dist"
 package = "./plugins/astro-kirby-sync"
 
 [build.processing.html]
-pretty_urls = false
+pretty_urls = true
 
 [build.environment]
 NODE_VERSION = "23"
