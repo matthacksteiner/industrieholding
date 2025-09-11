@@ -4,7 +4,6 @@ import type { KirbyMetaComponentProps } from '@app-types/components.types';
 const { data, global, pageTitle } = Astro.props as KirbyMetaComponentProps;
 const socialMeta = data.meta.social;
 const kirbyUrl = global.kirbyUrl;
-// Use current origin for bulletproof canonical URLs
 const currentOrigin = Astro.url.origin;
 const canonicalUrl = new URL(Astro.url.pathname, currentOrigin);
 const separators = data.meta.separators || '|';
