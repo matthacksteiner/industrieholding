@@ -8,10 +8,18 @@ publish = "dist"
 package = "./plugins/astro-kirby-sync"
 
 [build.processing.html]
-pretty_urls = true
+pretty_urls = false  # Let Astro handle URL structure completely
 
 [build.environment]
 NODE_VERSION = "23"
+
+# Ensure any non-trailing-slash URLs redirect to trailing slash versions
+[[redirects]]
+  from = "/*"
+  to = "/:splat/"
+  status = 301
+  force = false
+  conditions = {Path = ["!/*.*", "!/*/*/"]}
 
 [images]
 remote_images = [ "https://cms.baukasten.matthiashacksteiner.net/media/.*" ]
