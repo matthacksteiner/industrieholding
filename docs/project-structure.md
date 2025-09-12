@@ -46,7 +46,7 @@ vitest.config.ts - Configuration for Vitest, the testing framework
 
 ## Key Files
 
-- `astro.config.mjs`: The central configuration file for Astro. It defines integrations (like Tailwind, Netlify adapter, custom plugins), site-wide options, and build settings.
+- `astro.config.mjs`: The central configuration file for Astro. It defines integrations (like Tailwind, Netlify adapter, custom plugins), site-wide options, build settings, and routing configuration including `trailingSlash: 'always'` for consistent URL structure.
 - `tailwind.config.cjs`: Configures Tailwind CSS, including custom themes, plugins, and content sources for purging unused styles.
 - `netlify.toml`: Manages build settings, redirects, headers, and other configurations for deploying the site on Netlify.
 - `package.json`: Lists project dependencies, devDependencies, and defines npm scripts for common tasks like `dev`, `build`, `preview`, and `test`.

@@ -14,8 +14,9 @@ The Baukasten-Astro project is designed with multi-language support, allowing co
 ## Language-Specific Routing
 
 - **URL Structure**: Language is typically indicated by a prefix in the URL path.
-  - Example: `mysite.com/en/about-us`, `mysite.com/de/ueber-uns`.
-  - If `prefixDefaultLocale` is `false` (common), the default language might not have a prefix: `mysite.com/about-us` (for English if default) and `mysite.com/de/ueber-uns` (for German).
+  - Example: `mysite.com/en/about-us/`, `mysite.com/de/ueber-uns/`.
+  - If `prefixDefaultLocale` is `false` (common), the default language might not have a prefix: `mysite.com/about-us/` (for English if default) and `mysite.com/de/ueber-uns/` (for German).
+  - **Note**: All URLs end with trailing slashes due to `trailingSlash: 'always'` configuration, including multi-language URLs.
 - **Dynamic Routes**: The `src/pages/[lang]/[...slug].astro` (and similar variants like `src/pages/[lang]/[section]/[...slug].astro`) file structure is key to handling language-specific pages.
   - The `[lang]` parameter in the route is used to fetch and display content for that specific language.
 

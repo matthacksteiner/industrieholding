@@ -7,6 +7,7 @@ The Baukasten-Astro project is configured for deployment on Netlify, a platform 
 - **Continuous Deployment**: Netlify integrates with Git repositories (e.g., GitHub, GitLab, Bitbucket). Pushing changes to a configured branch (typically `main` or `master`) automatically triggers a new build and deployment process.
 - **Global CDN**: Netlify serves sites from a global Content Delivery Network (CDN), ensuring fast load times for users worldwide.
 - **Build Environment**: Netlify provides a build environment where it installs dependencies, runs the build command (`npm run build` or `astro build`), and deploys the generated static assets (from `dist/` by default for Astro).
+- **URL Consistency**: The project uses `trailingSlash: 'always'` configuration, ensuring all page URLs end with trailing slashes for consistent SEO and navigation behavior.
 
 ## Configuration
 

@@ -40,7 +40,7 @@ The `astro-kirby-sync` plugin (and potentially the preview route) interacts with
 
     - **Purpose**: Provides a list of all top-level pages or a curated list of pages (e.g., for sitemaps or listings).
     - **Content**: An array of page objects, each usually containing:
-      - `uri`: The unique URI of the page (e.g., `about`, `services/digital`).
+      - `uri`: The unique URI of the page (e.g., `about`, `services/digital`). Note: These URIs from the CMS don't include trailing slashes, but the frontend adds them automatically due to `trailingSlash: 'always'` configuration.
       - `title`: The page title.
       - `id`: Kirby's internal page ID.
       - `intendedTemplate`: The Kirby template used for this page, which helps Astro map it to a layout or component.

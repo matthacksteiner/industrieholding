@@ -89,6 +89,7 @@ if (!toggle) {
 - **Multi-language**: Built-in internationalization support
 - **Performance Optimized**: Image optimization, lazy loading, prefetching
 - **Modern Tooling**: Astro 5.8.2+, Tailwind CSS, Vitest testing
+- **Consistent URL Structure**: `trailingSlash: 'always'` for SEO benefits and URL consistency
 
 ## Best Practices
 
