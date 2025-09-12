@@ -1,2 +1,0 @@
-# Redirect specific preview path without trailing slash only
-/preview      /preview/     301!
