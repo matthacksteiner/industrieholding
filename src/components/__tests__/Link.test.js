@@ -42,7 +42,7 @@ describe('Link Component', () => {
 			props,
 			params: { lang: 'en' },
 		});
-		expect(result).toContain('href="/en/about#section1"');
+		expect(result).toContain('href="/en/about/#section1"');
 		expect(result).toContain('About Us');
 	});
 
@@ -57,8 +57,41 @@ describe('Link Component', () => {
 		};
 
 		const result = await container.renderToString(Link, { props });
-		expect(result).toContain('href="/contact"');
+		expect(result).toContain('href="/contact/"');
 		expect(result).toContain('Contact');
+	});
+
+	test('renders home page link correctly with language', async () => {
+		const container = await AstroContainer.create();
+		const props = {
+			link: {
+				type: 'page',
+				uri: '',
+				title: 'Home',
+			},
+		};
+
+		const result = await container.renderToString(Link, {
+			props,
+			params: { lang: 'en' },
+		});
+		expect(result).toContain('href="/en/"');
+		expect(result).toContain('Home');
+	});
+
+	test('renders home page link correctly without language', async () => {
+		const container = await AstroContainer.create();
+		const props = {
+			link: {
+				type: 'page',
+				uri: '',
+				title: 'Home',
+			},
+		};
+
+		const result = await container.renderToString(Link, { props });
+		expect(result).toContain('href="/"');
+		expect(result).toContain('Home');
 	});
 
 	test('renders file type link with download attribute', async () => {

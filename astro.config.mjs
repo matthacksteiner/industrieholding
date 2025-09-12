@@ -27,6 +27,7 @@ export default defineConfig({
 		prerender: true,
 	},
 	site: frontendUrl,
+	trailingSlash: 'always',
 	i18n:
 		translations && translations.length > 0
 			? {

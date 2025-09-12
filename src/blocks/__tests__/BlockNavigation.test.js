@@ -57,8 +57,8 @@ describe('BlockNavigation Component', () => {
 		expect(result).toContain('navigation-block');
 		expect(result).toContain('← Vorheriges Projekt');
 		expect(result).toContain('Nächstes Projekt →');
-		expect(result).toContain('href="/previous-project"');
-		expect(result).toContain('href="/next-project"');
+		expect(result).toContain('href="/previous-project/"');
+		expect(result).toContain('href="/next-project/"');
 	});
 
 	test('does not render when no navigation data is available', async () => {
@@ -111,9 +111,9 @@ describe('BlockNavigation Component', () => {
 		});
 
 		expect(result).toContain('← Vorheriges Projekt');
-		expect(result).toContain('href="/previous-project"');
+		expect(result).toContain('href="/previous-project/"');
 		expect(result).not.toContain('Nächstes Projekt →');
-		expect(result).not.toContain('href="/next-project"');
+		expect(result).not.toContain('href="/next-project/"');
 	});
 
 	test('renders only next link when previousToggle is false', async () => {
@@ -128,9 +128,9 @@ describe('BlockNavigation Component', () => {
 		});
 
 		expect(result).not.toContain('← Vorheriges Projekt');
-		expect(result).not.toContain('href="/previous-project"');
+		expect(result).not.toContain('href="/previous-project/"');
 		expect(result).toContain('Nächstes Projekt →');
-		expect(result).toContain('href="/next-project"');
+		expect(result).toContain('href="/next-project/"');
 	});
 
 	test('does not render when both toggles are false', async () => {
@@ -317,7 +317,7 @@ describe('BlockNavigation Component', () => {
 		});
 
 		expect(result).toContain('← Vorheriges Projekt');
-		expect(result).toContain('href="/previous-only"');
+		expect(result).toContain('href="/previous-only/"');
 		expect(result).not.toContain('Nächstes Projekt →');
 	});
 
@@ -342,7 +342,7 @@ describe('BlockNavigation Component', () => {
 
 		expect(result).not.toContain('← Vorheriges Projekt');
 		expect(result).toContain('Nächstes Projekt →');
-		expect(result).toContain('href="/next-only"');
+		expect(result).toContain('href="/next-only/"');
 	});
 
 	/**
@@ -384,15 +384,15 @@ describe('BlockNavigation Component', () => {
 		});
 
 		// Verify that Link component receives correct props
-		expect(result).toContain('href="/previous-project"');
-		expect(result).toContain('href="/next-project"');
+		expect(result).toContain('href="/previous-project/"');
+		expect(result).toContain('href="/next-project/"');
 
 		// Check for proper link structure (allow for whitespace)
 		expect(result).toMatch(
-			/<a[^>]*href="\/previous-project"[^>]*>\s*← Vorheriges Projekt\s*<\/a>/
+			/<a[^>]*href="\/previous-project\/"[^>]*>\s*← Vorheriges Projekt\s*<\/a>/
 		);
 		expect(result).toMatch(
-			/<a[^>]*href="\/next-project"[^>]*>\s*Nächstes Projekt →\s*<\/a>/
+			/<a[^>]*href="\/next-project\/"[^>]*>\s*Nächstes Projekt →\s*<\/a>/
 		);
 	});
 });

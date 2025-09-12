@@ -1,5 +1,5 @@
 ---
-import { toRem } from '@lib/helpers';
+import { toRem, ensureTrailingSlash } from '@lib/helpers';
 import ImageComponent from '@components/ImageComponent.astro';
 import type { SectionImageProps } from '@app-types/components.types';
 
@@ -90,7 +90,9 @@ const overlayColor = captionColor || '#000000';
 			)}
 		</div>
 	) : (
-		<a href={lang ? `/${lang}/${item.uri}` : '/' + item.uri}>
+		<a
+			href={ensureTrailingSlash(lang ? `/${lang}/${item.uri}` : '/' + item.uri)}
+		>
 			<div class:list={['relative', showOverlay && 'overlay']}>
 				<ImageComponent
 					global={global}
