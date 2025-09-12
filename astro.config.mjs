@@ -29,6 +29,9 @@ export default defineConfig({
 	},
 	site: frontendUrl,
 	trailingSlash: 'always',
+	redirects: {
+		'/maintenance': '/maintenance/',
+	},
 	i18n:
 		translations && translations.length > 0
 			? {
