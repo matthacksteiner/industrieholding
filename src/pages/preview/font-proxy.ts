@@ -1,4 +1,3 @@
----
 export const prerender = false;
 
 interface FontProxyResponse {
@@ -61,9 +60,8 @@ async function handleFontProxy(url: string): Promise<FontProxyResponse> {
 	}
 }
 
-// Handle GET requests
-if (Astro.request.method === 'GET') {
-	const fontUrl = Astro.url.searchParams.get('url');
+export async function GET({ request, url }): Promise<Response> {
+	const fontUrl = url.searchParams.get('url');
 
 	if (!fontUrl) {
 		return new Response('Font URL is required', {
@@ -76,8 +74,7 @@ if (Astro.request.method === 'GET') {
 	return new Response(body, { status, headers });
 }
 
-// Handle OPTIONS requests for CORS
-if (Astro.request.method === 'OPTIONS') {
+export function OPTIONS(): Response {
 	return new Response(null, {
 		status: 204,
 		headers: {
@@ -88,10 +85,3 @@ if (Astro.request.method === 'OPTIONS') {
 		},
 	});
 }
-
-// Handle other methods
-return new Response('Method not allowed', {
-	status: 405,
-	headers: { 'Content-Type': 'text/plain' },
-});
----
