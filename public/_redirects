@@ -1,2 +1,0 @@
-# Redirect preview URL without trailing slash to the version with trailing slash
-/preview                /preview/               301!
