@@ -21,6 +21,7 @@ remote_images = [ "https://cms.baukasten.matthiashacksteiner.net/media/.*" ]
 from = "/preview"
 to = "/preview/"
 status = 301
+force = false
 
 [dev]
   autoLaunch = false
