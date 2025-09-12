@@ -16,5 +16,11 @@ NODE_VERSION = "23"
 [images]
 remote_images = [ "https://cms.baukasten.matthiashacksteiner.net/media/.*" ]
 
+# Handle preview URL without trailing slash - redirect to trailing slash version
+[[redirects]]
+from = "/preview"
+to = "/preview/"
+status = 301
+
 [dev]
   autoLaunch = false
