@@ -1,5 +1,6 @@
 ---
-import { toRem, ensureTrailingSlash } from '@lib/helpers';
+import { toRem, ensureTrailingSlash, isPreviewMode } from '@lib/helpers';
+import { getPreviewPath } from '@lib/preview';
 import ImageComponent from '@components/ImageComponent.astro';
 import type { SectionImageProps } from '@app-types/components.types';
 
@@ -91,7 +92,11 @@ const overlayColor = captionColor || '#000000';
 		</div>
 	) : (
 		<a
-			href={ensureTrailingSlash(lang ? `/${lang}/${item.uri}` : '/' + item.uri)}
+			href={
+				isPreviewMode()
+					? ensureTrailingSlash(getPreviewPath(item.uri, lang))
+					: ensureTrailingSlash(lang ? `/${lang}/${item.uri}` : '/' + item.uri)
+			}
 		>
 			<div class:list={['relative', showOverlay && 'overlay']}>
 				<ImageComponent
