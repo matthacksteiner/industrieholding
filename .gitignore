@@ -12,6 +12,7 @@
 .env.production
 .netlify
 bun.lockb
+CRUSH.md
 
 # ------------------------------------------------------------------------------
 # Dependencies & Build output
