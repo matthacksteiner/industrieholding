@@ -291,7 +291,9 @@ function createNetlifyImageUrl(
 	height: number,
 	format = 'avif'
 ): string {
-	return `${baseUrl}/.netlify/images?url=${source}&w=${width}&h=${height}&fit=cover&fm=${format}&q=70`;
+	return `/.netlify/images?url=${encodeURIComponent(
+		source
+	)}&w=${width}&h=${height}&fit=cover&fm=${format}&q=70`;
 }
 
 function createProductionSrcSet(

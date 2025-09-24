@@ -41,7 +41,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
 		// If maintenance mode is enabled, redirect all pages to maintenance
 		if (globalData?.maintenanceToggle === true) {
 			// Use rewrite instead of redirect to avoid showing /maintenance in URL
-			return context.rewrite('/maintenance');
+			// Use /maintenance/ to match trailingSlash: 'always' configuration
+			return context.rewrite('/maintenance/');
 		}
 	} catch (error) {
 		console.warn('Failed to check maintenance mode in middleware:', error);

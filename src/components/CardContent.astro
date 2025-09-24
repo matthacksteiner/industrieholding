@@ -25,6 +25,15 @@ const {
 	class:list={[
 		'card-main-content transition-opacity duration-300 h-full flex flex-col',
 		hovertoggle && 'group-hover:opacity-0',
+		{
+			'justify-around': justify === 'space-around',
+			'justify-between': justify === 'space-between',
+			'justify-evenly': justify === 'space-evenly',
+			'justify-start': justify === 'start',
+			'justify-center': justify === 'center',
+			'justify-end': justify === 'end',
+			'justify-normal': !justify || justify === 'normal',
+		},
 	]}
 >
 	{

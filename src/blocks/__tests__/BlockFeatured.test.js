@@ -156,9 +156,9 @@ describe('BlockFeatured Component', () => {
 		});
 
 		// Non-cover items should have links
-		expect(result).toContain('href="/de/items/item-1"');
+		expect(result).toContain('href="/de/items/item-1/"');
 		// Cover-only items should not have links to their pages
-		expect(result).not.toContain('href="/de/items/item-2"');
+		expect(result).not.toContain('href="/de/items/item-2/"');
 	});
 
 	test('cover-only items display content differently', async () => {
@@ -180,7 +180,7 @@ describe('BlockFeatured Component', () => {
 
 		// Cover-only items with center caption should have absolute positioning
 		expect(result).toContain('absolute left-2/4 top-2/4');
-		expect(result).toContain('z-20 w-4/5 max-w-[75%]');
+		expect(result).toContain('z-10 w-4/5 max-w-[75%]');
 		expect(result).toContain('-translate-x-2/4 -translate-y-2/4');
 	});
 
@@ -200,7 +200,7 @@ describe('BlockFeatured Component', () => {
 
 		// Center-aligned content should have absolute positioning classes
 		expect(result).toContain('absolute left-2/4 top-2/4');
-		expect(result).toContain('z-20 w-4/5 max-w-[75%]');
+		expect(result).toContain('z-10 w-4/5 max-w-[75%]');
 		expect(result).toContain('-translate-x-2/4 -translate-y-2/4');
 	});
 
@@ -217,7 +217,7 @@ describe('BlockFeatured Component', () => {
 
 		// Non-center captions should use the text-content class pattern
 		expect(result).toContain('featured-text-content');
-		expect(result).toContain('z-20');
+		expect(result).toContain('z-10');
 		// Should not contain absolute positioning for center captions
 		expect(result).not.toContain('absolute left-2/4 top-2/4');
 	});
@@ -335,9 +335,9 @@ describe('BlockFeatured Component', () => {
 		});
 
 		// Non-cover items should have links
-		expect(result).toContain('href="/de/items/item-1"');
+		expect(result).toContain('href="/de/items/item-1/"');
 		// Cover-only items should not have links (just image)
-		expect(result).not.toContain('href="/de/items/item-2"');
+		expect(result).not.toContain('href="/de/items/item-2/"');
 	});
 
 	test('renders links without language prefix when no lang param', async () => {
@@ -346,7 +346,7 @@ describe('BlockFeatured Component', () => {
 			props: baseProps,
 		});
 
-		expect(result).toContain('href="/items/item-1"');
+		expect(result).toContain('href="/items/item-1/"');
 	});
 
 	test('applies correct grid classes', async () => {

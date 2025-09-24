@@ -36,14 +36,14 @@ function createFontCSS(
 			if (usePreviewProxy) {
 				if (item.woff2) {
 					sources.push(
-						`url('/preview/font-proxy?url=${encodeURIComponent(
+						`url('/preview/font-proxy/?url=${encodeURIComponent(
 							item.woff2
 						)}') format('woff2')`
 					);
 				}
 				if (item.woff) {
 					sources.push(
-						`url('/preview/font-proxy?url=${encodeURIComponent(
+						`url('/preview/font-proxy/?url=${encodeURIComponent(
 							item.woff
 						)}') format('woff')`
 					);
@@ -111,7 +111,7 @@ export async function getFonts(): Promise<FontData> {
 
 					if (item.originalWoff2) {
 						sources.push(
-							`url('/preview/font-proxy?url=${encodeURIComponent(
+							`url('/preview/font-proxy/?url=${encodeURIComponent(
 								item.originalWoff2
 							)}') format('woff2')`
 						);
@@ -119,7 +119,7 @@ export async function getFonts(): Promise<FontData> {
 
 					if (item.originalWoff) {
 						sources.push(
-							`url('/preview/font-proxy?url=${encodeURIComponent(
+							`url('/preview/font-proxy/?url=${encodeURIComponent(
 								item.originalWoff
 							)}') format('woff')`
 						);

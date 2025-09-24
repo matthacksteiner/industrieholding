@@ -1,6 +1,6 @@
 ---
 import type { PaginationComponentProps } from '@app-types/components.types';
-import { toRem } from '@lib/helpers';
+import { toRem, ensureTrailingSlash } from '@lib/helpers';
 
 const { global, length, currentPage, firstUrl, prevUrl, nextUrl } =
 	Astro.props as PaginationComponentProps;
@@ -48,25 +48,34 @@ const paginationList = Array.from({ length: Number(length) }, (_, i) => i + 1);
 	}
 
 	{
-		paginationList.map((num) => (
-			<a
-				href={`${firstUrl}${num == 1 ? '' : '/' + num}`}
-				class:list={[
-					'pagination__link',
-					`font--${size}`,
-					`paginationText--${color}`,
-					`paginationBg--${bg}`,
-					`paginationBoder--${paginationBorderColor}`,
-					`paginationTextHover--${colorHover}`,
-					`paginationBgHover--${bgHover}`,
-					`paginationBorderHover--${paginationBorderColorHover}`,
-					currentPage == num &&
-						`paginationTextActive--${colorActive} paginationBgActive--${bgActive} paginationBorderActive--${paginationBorderColorActive} active`,
-				]}
-			>
-				{num}
-			</a>
-		))
+		paginationList.map((num) => {
+			// Construct pagination URL with proper trailing slash
+			const baseUrl = firstUrl || '/';
+			const pageUrl =
+				num == 1
+					? ensureTrailingSlash(baseUrl)
+					: ensureTrailingSlash(`${baseUrl}/${num}`);
+
+			return (
+				<a
+					href={pageUrl}
+					class:list={[
+						'pagination__link',
+						`font--${size}`,
+						`paginationText--${color}`,
+						`paginationBg--${bg}`,
+						`paginationBoder--${paginationBorderColor}`,
+						`paginationTextHover--${colorHover}`,
+						`paginationBgHover--${bgHover}`,
+						`paginationBorderHover--${paginationBorderColorHover}`,
+						currentPage == num &&
+							`paginationTextActive--${colorActive} paginationBgActive--${bgActive} paginationBorderActive--${paginationBorderColorActive} active`,
+					]}
+				>
+					{num}
+				</a>
+			);
+		})
 	}
 
 	{

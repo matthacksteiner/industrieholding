@@ -2,6 +2,20 @@
 import { performFullSync, performIncrementalSync } from './astro-kirby-sync.js';
 import fs from 'fs';
 import path from 'path';
+import fetch from 'node-fetch';
+
+// Helper function to fetch JSON from URL
+async function fetchJson(url) {
+	try {
+		const response = await fetch(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return await response.json();
+	} catch (error) {
+		throw error;
+	}
+}
 
 // Simple Astro integration for astro-kirby-sync
 export default function astroKirbySync() {
@@ -12,7 +26,21 @@ export default function astroKirbySync() {
 				// Skip in development mode
 				if (process.env.NODE_ENV === 'development') {
 					logger.info('🔄 Development mode: Skipping content sync');
-					logger.warn('🚧 Maintenance mode is bypassed in development');
+
+					// Check if maintenance mode is enabled and show bypass message
+					try {
+						const API_URL =
+							process.env.KIRBY_URL ||
+							'https://cms.baukasten.matthiashacksteiner.net';
+						const global = await fetchJson(`${API_URL}/global.json`);
+						const isMaintenanceMode = global?.maintenanceToggle === true;
+						if (isMaintenanceMode) {
+							logger.warn('🚧 Maintenance mode is bypassed in development');
+						}
+					} catch (error) {
+						// Ignore errors when checking maintenance mode in dev
+					}
+
 					return;
 				}
 

@@ -1,5 +1,5 @@
 import path from 'path';
-import { isPreviewMode } from '@lib/helpers';
+import { isPreviewMode, ensureTrailingSlash } from '@lib/helpers';
 import type {
 	KirbyError,
 	Language,
@@ -422,7 +422,7 @@ export async function getLocalizedPageUrl({
 	if (isHome || currentPageSlug === 'home') {
 		return targetLangCode === defaultLang && !prefixDefaultLocale
 			? '/'
-			: `/${targetLangCode}`;
+			: ensureTrailingSlash(`/${targetLangCode}`);
 	}
 
 	try {
@@ -444,8 +444,8 @@ export async function getLocalizedPageUrl({
 
 		if (targetPage) {
 			return targetLangCode === defaultLang && !prefixDefaultLocale
-				? `/${targetPage.uri}`
-				: `/${targetLangCode}/${targetPage.uri}`;
+				? ensureTrailingSlash(`/${targetPage.uri}`)
+				: ensureTrailingSlash(`/${targetLangCode}/${targetPage.uri}`);
 		}
 	} catch (error) {
 		console.error('Error fetching translations:', error);
@@ -454,7 +454,7 @@ export async function getLocalizedPageUrl({
 	// Fallback to language root if no translation found
 	return targetLangCode === defaultLang && !prefixDefaultLocale
 		? '/'
-		: `/${targetLangCode}`;
+		: ensureTrailingSlash(`/${targetLangCode}`);
 }
 
 /**

@@ -15,8 +15,17 @@ For detailed maintenance mode functionality, see [Maintenance Mode](maintenance-
 ## File-Based Routing
 
 - Any `.astro`, `.md`, or `.html` file in `src/pages/` becomes a page on your site.
-- For example, `src/pages/about.astro` maps to `/about`.
+- For example, `src/pages/about.astro` maps to `/about/` (note the trailing slash).
 - `src/pages/index.astro` maps to the homepage (`/`).
+
+### Trailing Slash Configuration
+
+The project is configured with `trailingSlash: 'always'` in `astro.config.mjs`, which means:
+
+- **All page URLs end with trailing slashes**: `/about/`, `/services/web-development/`
+- **Homepage remains without trailing slash**: `/`
+- **Automatic URL consistency**: Astro ensures all internal links include trailing slashes
+- **SEO benefits**: Consistent URL structure prevents duplicate content issues
 
 ## Dynamic Routes
 

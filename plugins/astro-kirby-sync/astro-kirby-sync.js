@@ -522,9 +522,23 @@ export default {
 			console.log(
 				chalk.gray('Content will be fetched directly from the CMS API')
 			);
-			console.log(
-				chalk.yellow('🚧 Maintenance mode is bypassed in development')
-			);
+
+			// Check if maintenance mode is enabled and show bypass message
+			try {
+				const API_URL = process.env.KIRBY_URL;
+				if (API_URL) {
+					const global = await fetchJson(`${API_URL}/global.json`);
+					const isMaintenanceMode = global?.maintenanceToggle === true;
+					if (isMaintenanceMode) {
+						console.log(
+							chalk.yellow('🚧 Maintenance mode is bypassed in development')
+						);
+					}
+				}
+			} catch (error) {
+				// Ignore errors when checking maintenance mode in dev
+			}
+
 			return;
 		}
 

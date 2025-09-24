@@ -1,6 +1,6 @@
 ---
 import type { HeaderComponentProps } from '@app-types/components.types';
-import { toRem, isPreviewMode } from '@lib/helpers';
+import { toRem, isPreviewMode, ensureTrailingSlash } from '@lib/helpers';
 import Button from '@blocks/BlockButton.astro';
 import VectorImage from '@components/VectorImage.astro';
 import Hamburger from '@components/Hamburger.astro';
@@ -69,7 +69,7 @@ const isPreview = isPreviewMode();
 							translations.length < 1 ||
 							(!prefixDefaultLocale && defaultLang === currentLang)
 								? '/'
-								: '/' + currentLang
+								: ensureTrailingSlash('/' + currentLang)
 						}`}
 						aria-label="Zurück zur Homepage"
 					>

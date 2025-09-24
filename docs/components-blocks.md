@@ -415,6 +415,8 @@ import Link from '@components/Link.astro';
 )}
 ```
 
+**Note**: The Link component automatically handles trailing slash consistency due to the project's `trailingSlash: 'always'` configuration. All internal page links will include trailing slashes for SEO consistency.
+
 ### Step 5: Styling Guidelines
 
 #### Use CSS Custom Properties

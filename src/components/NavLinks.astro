@@ -1,7 +1,7 @@
 ---
 import type { NavLinksComponentProps } from '@app-types/components.types';
 import Button from '@blocks/BlockButton.astro';
-import { isPreviewMode } from '@lib/helpers';
+import { isPreviewMode, ensureTrailingSlash } from '@lib/helpers';
 
 // Props and parameters
 const { data, global, links } = Astro.props as NavLinksComponentProps;
@@ -47,20 +47,30 @@ const getCommonClasses = (item, isActive, isLast) => [
 			let href = isUrl
 				? item.href
 				: item.hash
-				? `${shouldIncludeLanguage ? '/' + effectiveLang : '/'}#${item.hash}`
+				? `${shouldIncludeLanguage ? '/' + effectiveLang + '/' : '/'}#${item.hash}`
 				: shouldIncludeLanguage
-				? `/${effectiveLang}/${item.uri}`
-				: `/${item.uri}`;
+				? ensureTrailingSlash(`/${effectiveLang}/${item.uri}`)
+				: ensureTrailingSlash(`/${item.uri}`);
 
 			// Handle preview mode URLs
 			if (isPreview && !isUrl) {
 				const parts = href.split('/').filter(Boolean);
+				// Remove hash fragment if present for URL manipulation
+				const hashIndex = parts.findIndex(part => part.includes('#'));
+				const hashFragment = hashIndex !== -1 ? parts[hashIndex].split('#')[1] : '';
+				const cleanParts = hashIndex !== -1 ? [...parts.slice(0, hashIndex), parts[hashIndex].split('#')[0]] : parts;
+
 				if (shouldIncludeLanguage) {
-					const hasLang = parts[0] === effectiveLang;
-					const cleanParts = hasLang ? parts : [effectiveLang, ...parts];
-					href = `/preview/${cleanParts.join('/')}`;
+					const hasLang = cleanParts[0] === effectiveLang;
+					const finalParts = hasLang ? cleanParts : [effectiveLang, ...cleanParts];
+					href = ensureTrailingSlash(`/preview/${finalParts.filter(Boolean).join('/')}`);
 				} else {
-					href = `/preview/${parts.join('/')}`;
+					href = ensureTrailingSlash(`/preview/${cleanParts.filter(Boolean).join('/')}`);
+				}
+
+				// Re-add hash fragment if it existed
+				if (hashFragment) {
+					href = `${href}#${hashFragment}`;
 				}
 			}
 

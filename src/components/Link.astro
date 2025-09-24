@@ -26,6 +26,7 @@ import type {
 	FileLink,
 	LinkComponentProps,
 } from '@app-types/components.types';
+import { ensureTrailingSlash } from '@lib/helpers';
 
 interface Props extends LinkComponentProps {}
 
@@ -62,19 +63,17 @@ switch (link.type) {
 
 		if (uri === '') {
 			// For home page (empty URI), construct URL with just the language prefix
-			// Format: /language or / (if no language)
+			// Format: /language/ or / (if no language) - always with trailing slash
 			// Add hash fragment if it exists
-			href = `${currentLang ? `/${currentLang}` : `/`}${
-				hash ? `#${hash}` : ''
-			}`;
+			const baseUrl = currentLang ? `/${currentLang}/` : '/';
+			href = `${baseUrl}${hash ? `#${hash}` : ''}`;
 		} else {
 			// For other pages, construct URL with language prefix and URI
-			// The URI from CMS already includes the full path, so use it as-is
-			// Format: /language/uri or /uri (if no language)
+			// Format: /language/uri/ or /uri/ (if no language) - always with trailing slash
 			// Add hash fragment if it exists
-			href = `${currentLang ? `/${currentLang}/` : '/'}${uri}${
-				hash ? `#${hash}` : ''
-			}`;
+			const baseUrl = currentLang ? `/${currentLang}/${uri}` : `/${uri}`;
+			const urlWithTrailingSlash = ensureTrailingSlash(baseUrl, true);
+			href = `${urlWithTrailingSlash}${hash ? `#${hash}` : ''}`;
 		}
 		break;
 	case 'file':

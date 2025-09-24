@@ -51,3 +51,32 @@ export function getAltFallback(name?: string): string {
 				.replace(/\b\w/g, (char) => char.toUpperCase())
 		: 'Image';
 }
+
+/**
+ * Ensures a URL has a trailing slash for internal page links
+ * External URLs, anchor links, and file links are returned unchanged
+ * @param url - The URL to process
+ * @param isInternalPage - Whether this is an internal page link (defaults to true)
+ * @returns URL with trailing slash if it's an internal page link
+ */
+export function ensureTrailingSlash(
+	url: string,
+	isInternalPage: boolean = true
+): string {
+	// Don't modify external URLs, anchor links, or special URLs
+	if (
+		!isInternalPage ||
+		url.startsWith('http') ||
+		url.startsWith('//') ||
+		url.includes('#') ||
+		url.startsWith('mailto:') ||
+		url.startsWith('tel:') ||
+		url === '/' ||
+		url === ''
+	) {
+		return url;
+	}
+
+	// Ensure trailing slash for internal page links
+	return url.endsWith('/') ? url : `${url}/`;
+}

@@ -9,6 +9,7 @@ import langFolderRename from './plugins/lang-folder-rename/langFolderRename.js';
 import fontDownloader from './plugins/font-downloader/fontDownloader.js';
 import astroKirbySync from './plugins/astro-kirby-sync/index.js';
 import netlifyRemoteImages from './plugins/netlify-remote-images/index.js';
+import netlifyPrettyUrls from './plugins/netlify-pretty-urls/index.js';
 import path from 'path';
 
 const API_URL = process.env.KIRBY_URL;
@@ -27,6 +28,10 @@ export default defineConfig({
 		prerender: true,
 	},
 	site: frontendUrl,
+	trailingSlash: 'always',
+	redirects: {
+		'/maintenance': '/maintenance/',
+	},
 	i18n:
 		translations && translations.length > 0
 			? {
@@ -47,6 +52,7 @@ export default defineConfig({
 		langFolderRename(),
 		fontDownloader(),
 		netlifyRemoteImages(),
+		netlifyPrettyUrls(),
 		compress({
 			HTML: true,
 			JavaScript: true,
