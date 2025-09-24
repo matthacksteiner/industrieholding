@@ -121,6 +121,7 @@ const alignClass = {
 		data-netlify-honeypot={spamProtection === 'honeypot'
 			? 'bot-field'
 			: undefined}
+		data-netlify-recaptcha={spamProtection === 'captcha' ? 'true' : undefined}
 		action={successPage?.href || successPage?.uri || '/'}
 		class:list={[
 			'contact-form',
