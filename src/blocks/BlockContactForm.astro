@@ -20,6 +20,16 @@ const {
 	global,
 	metadata,
 } = Astro.props as BlockContactFormComponentProps;
+
+// Generate unique ID for this form instance
+const formId =
+	metadata?.identifier || `form-${Math.random().toString(36).substr(2, 9)}`;
+
+// Ensure unique form name for Netlify Forms when multiple forms exist
+const uniqueFormName = metadata?.identifier
+	? `${formName}-${metadata.identifier}`
+	: formName;
+
 // Extract field configurations with defaults
 const firstnameConfig = fields.firstname || {};
 const lastnameConfig = fields.lastname || {};
@@ -105,7 +115,7 @@ const alignClass = {
 	{...metadata?.attributes}
 >
 	<form
-		name={formName}
+		name={uniqueFormName}
 		method="POST"
 		data-netlify="true"
 		data-netlify-honeypot={spamProtection === 'honeypot'
@@ -124,7 +134,7 @@ const alignClass = {
 		data-subject={emailSubject}
 	>
 		<!-- Hidden fields for Netlify -->
-		<input type="hidden" name="form-name" value={formName} />
+		<input type="hidden" name="form-name" value={uniqueFormName} />
 		<input type="hidden" name="subject" value={emailSubject} />
 
 		<!-- Honeypot field (hidden) -->
@@ -160,12 +170,12 @@ const alignClass = {
 						return (
 							<div class:list={['flex', gapClass]}>
 								<div class="form-field flex-1">
-									<label for="firstname" class="form-label">
+									<label for={`${formId}-firstname`} class="form-label">
 										{firstnameConfig.label}
 									</label>
 									<input
 										type="text"
-										id="firstname"
+										id={`${formId}-firstname`}
 										name="firstname"
 										placeholder={firstnameConfig.placeholder}
 										class="form-input"
@@ -176,12 +186,12 @@ const alignClass = {
 									)}
 								</div>
 								<div class="form-field flex-1">
-									<label for="lastname" class="form-label">
+									<label for={`${formId}-lastname`} class="form-label">
 										{lastnameConfig.label}
 									</label>
 									<input
 										type="text"
-										id="lastname"
+										id={`${formId}-lastname`}
 										name="lastname"
 										placeholder={lastnameConfig.placeholder}
 										class="form-input"
@@ -196,12 +206,12 @@ const alignClass = {
 					} else if (firstnameActive) {
 						return (
 							<div class="form-field">
-								<label for="firstname" class="form-label">
+								<label for={`${formId}-firstname`} class="form-label">
 									{firstnameConfig.label}
 								</label>
 								<input
 									type="text"
-									id="firstname"
+									id={`${formId}-firstname`}
 									name="firstname"
 									placeholder={firstnameConfig.placeholder}
 									class="form-input"
@@ -215,12 +225,12 @@ const alignClass = {
 					} else if (lastnameActive) {
 						return (
 							<div class="form-field">
-								<label for="lastname" class="form-label">
+								<label for={`${formId}-lastname`} class="form-label">
 									{lastnameConfig.label}
 								</label>
 								<input
 									type="text"
-									id="lastname"
+									id={`${formId}-lastname`}
 									name="lastname"
 									placeholder={lastnameConfig.placeholder}
 									class="form-input"
@@ -240,14 +250,14 @@ const alignClass = {
 			<div class="form-field">
 				{
 					emailConfig.label && (
-						<label for="email" class="form-label">
+						<label for={`${formId}-email`} class="form-label">
 							{emailConfig.label}
 						</label>
 					)
 				}
 				<input
 					type="email"
-					id="email"
+					id={`${formId}-email`}
 					name="email"
 					placeholder={emailConfig.placeholder || 'E-Mail'}
 					class="form-input"
@@ -260,13 +270,13 @@ const alignClass = {
 			<div class="form-field">
 				{
 					messageConfig.label && (
-						<label for="message" class="form-label">
+						<label for={`${formId}-message`} class="form-label">
 							{messageConfig.label}
 						</label>
 					)
 				}
 				<textarea
-					id="message"
+					id={`${formId}-message`}
 					name="message"
 					placeholder={messageConfig.placeholder}
 					rows={messageConfig.rows || 5}
@@ -315,7 +325,7 @@ const alignClass = {
 			</div>
 
 			<!-- Inline feedback container (hidden by default) -->
-			<div class="form-feedback hidden" id="form-feedback">
+			<div class="form-feedback hidden" id={`${formId}-feedback`}>
 				<div class="feedback-success hidden">
 					<p>
 						✓ {
@@ -577,7 +587,7 @@ const alignClass = {
 		) as NodeListOf<HTMLFormElement>;
 
 		forms.forEach((form) => {
-			const feedback = form.querySelector('#form-feedback') as HTMLElement;
+			const feedback = form.querySelector('.form-feedback') as HTMLElement;
 			const successDiv = form.querySelector('.feedback-success') as HTMLElement;
 			const errorDiv = form.querySelector('.feedback-error') as HTMLElement;
 			const submitButton = form.querySelector(
