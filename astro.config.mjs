@@ -31,7 +31,6 @@ export default defineConfig({
 	trailingSlash: 'always',
 	redirects: {
 		'/maintenance': '/maintenance/',
-		'/preview/': '/preview/home/',
 		'/preview': '/preview/home/',
 	},
 	i18n:
