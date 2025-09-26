@@ -22,31 +22,36 @@ const orgOrPerson = data.meta.org || data.meta.person;
 <meta name="robots" content={data.meta.robots} />
 <link rel="canonical" href={canonicalUrl} />
 {
-	Object.entries(socialMeta).map(([key, value]) => (
-		<meta
-			property={key === 'og:url' ? 'og:url' : key}
-			content={
-				key === 'og:url' ? canonicalUrl.href : (value as string).toString()
-			}
-		/>
-	))
+	Object.entries(socialMeta).map(([key, value]) => {
+		const isTwitter = key.startsWith('twitter:');
+		const content =
+			key === 'og:url' ? canonicalUrl.href : (value as string).toString();
+
+		return isTwitter ? (
+			<meta name={key} content={content} />
+		) : (
+			<meta property={key} content={content} />
+		);
+	})
 }
 <link rel="sitemap" href={kirbyUrl + '/sitemap.xml'} />
 
-<script define:vars={{ orgOrPerson }}>
+<script define:vars={{ orgOrPerson, siteTitle, currentOrigin }}>
 	if (!orgOrPerson) return;
 	const script = document.createElement('script');
 	script.setAttribute('type', 'application/ld+json');
 
 	script.textContent = JSON.stringify({
 		'@context': 'https://schema.org',
-		'@type': 'website',
-		author: {
+		'@type': 'WebSite',
+		url: currentOrigin,
+		name: siteTitle,
+		publisher: {
 			'@type': orgOrPerson['@type'],
 			name: orgOrPerson['name'],
 			email: orgOrPerson['email'] && orgOrPerson['email'],
 			logo: orgOrPerson['logo'] && orgOrPerson['logo'],
-			avatar: orgOrPerson['avatar'] && orgOrPerson['avatar'],
+			image: orgOrPerson['avatar'] && orgOrPerson['avatar'],
 		},
 	});
 	document.head.appendChild(script);
