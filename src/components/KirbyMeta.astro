@@ -5,27 +5,21 @@ const { data, global, pageTitle } = Astro.props as KirbyMetaComponentProps;
 const socialMeta = data.meta.social;
 const kirbyUrl = global.kirbyUrl;
 const currentOrigin = Astro.url.origin;
-const canonicalUrl = new URL(Astro.url.pathname, currentOrigin);
 const separators = data.meta.separators || '|';
 const siteTitle = global.siteTitle;
 const orgOrPerson = data.meta.org || data.meta.person;
 ---
 
 <title data-siteTitle={siteTitle} data-orgOrPerson={orgOrPerson}>
-	{
-		pageTitle === 'home' || undefined || null
-			? siteTitle
-			: `${pageTitle} ${separators} ${siteTitle}`
-	}
+	{data.meta.title}
 </title>
 <meta name="description" content={data.meta.description} />
 <meta name="robots" content={data.meta.robots} />
-<link rel="canonical" href={canonicalUrl} />
+<link rel="canonical" href={data.meta.canonical} />
 {
 	Object.entries(socialMeta).map(([key, value]) => {
 		const isTwitter = key.startsWith('twitter:');
-		const content =
-			key === 'og:url' ? canonicalUrl.href : (value as string).toString();
+		const content = (value as string).toString();
 
 		return isTwitter ? (
 			<meta name={key} content={content} />
