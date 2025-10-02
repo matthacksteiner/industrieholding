@@ -145,7 +145,6 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 			const autoplay = controls?.includes('autoplay');
 			const ticker = controls?.includes('ticker');
 			const effect = blockSlider?.dataset.effect;
-			const direction = blockSlider?.dataset.direction;
 			const viewMobile = blockSlider?.dataset.viewmobile
 				? blockSlider.dataset.viewmobile
 				: '1';
@@ -207,7 +206,7 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 					};
 				}
 
-				const swiper = new Swiper(swiperSlider as HTMLElement, swiperOptions);
+				const _swiper = new Swiper(swiperSlider as HTMLElement, swiperOptions);
 			}
 		}
 	});

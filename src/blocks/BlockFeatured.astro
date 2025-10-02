@@ -41,69 +41,73 @@ const hasItems = items && items.length > 0;
 // Convert values to proper types
 const gapDesktopValue = toRem(parseInt(gapDesktop || '0'));
 const gapMobileValue = toRem(parseInt(gapMobile || '0'));
-const gapHorizontalDesktopValue = gapHorizontalDesktop ? toRem(parseInt(gapHorizontalDesktop)) : gapDesktopValue;
-const gapHorizontalMobileValue = gapHorizontalMobile ? toRem(parseInt(gapHorizontalMobile)) : gapMobileValue;
+const gapHorizontalDesktopValue = gapHorizontalDesktop
+	? toRem(parseInt(gapHorizontalDesktop))
+	: gapDesktopValue;
+const gapHorizontalMobileValue = gapHorizontalMobile
+	? toRem(parseInt(gapHorizontalMobile))
+	: gapMobileValue;
 const gridBlockMobile = toRem(global.gridBlockMobile);
 const gridBlockDesktop = toRem(global.gridBlockDesktop);
 
 // Filter and sort items (only if items exist)
 const displayItems = hasItems
 	? items
-		.filter((item) => item.status === 'listed')
-		.sort((a, b) => (a.position || 0) - (b.position || 0))
+			.filter((item) => item.status === 'listed')
+			.sort((a, b) => (a.position || 0) - (b.position || 0))
 	: [];
 ---
 
-{hasItems && (
-<section
-	id={metadata?.identifier}
-	class:list={['blockFeatured', 'blocks', metadata?.classes]}
-	{...metadata?.attributes}
->
-	<div class="grid-default">
-		{
-			displayItems.map((item) => (
-				<div
-					class:list={[
-						`featured-item`,
-						`col-span-${spanMobile}`,
-						`lg:col-span-${spanDesktop}`,
-					]}
-				>
-					<SectionImage
-						item={item as any}
-						global={global}
-						ratioMobile={ratioMobile || '1/1'}
-						ratioDesktop={ratioDesktop || '1/1'}
-						span={Number(span) || 12}
-						spanDesktop={Number(spanDesktop) || 12}
-						titleLevel={titleLevel}
-						titleFont={titleFont}
-						titleColor={titleColor}
-						titleSize={titleSize}
-						titleAlign={titleAlign}
-						textFont={textFont}
-						textColor={textColor}
-						textSize={textSize}
-						textAlign={textAlign}
-						fontTitleToggle={fontTitleToggle}
-						fontTextToggle={fontTextToggle}
-						captionAlign={captionAlign}
-						captionControls={captionControls}
-						captionOverlayRange={captionOverlayRange}
-						captionColor={captionColor}
-						titleClass="featured-title"
-						textClass="featured-text"
-						textContentClass="featured-text-content"
-						lang={lang}
-						backgroundContainer="container"
-					/>
-				</div>
-			))
-		}
-	</div>
-</section>
-)}
+{
+	hasItems && (
+		<section
+			id={metadata?.identifier}
+			class:list={['blockFeatured', 'blocks', metadata?.classes]}
+			{...metadata?.attributes}
+		>
+			<div class="grid-default">
+				{displayItems.map((item) => (
+					<div
+						class:list={[
+							`featured-item`,
+							`col-span-${spanMobile}`,
+							`lg:col-span-${spanDesktop}`,
+						]}
+					>
+						<SectionImage
+							item={item as any}
+							global={global}
+							ratioMobile={ratioMobile || '1/1'}
+							ratioDesktop={ratioDesktop || '1/1'}
+							span={Number(span) || 12}
+							spanDesktop={Number(spanDesktop) || 12}
+							titleLevel={titleLevel}
+							titleFont={titleFont}
+							titleColor={titleColor}
+							titleSize={titleSize}
+							titleAlign={titleAlign}
+							textFont={textFont}
+							textColor={textColor}
+							textSize={textSize}
+							textAlign={textAlign}
+							fontTitleToggle={fontTitleToggle}
+							fontTextToggle={fontTextToggle}
+							captionAlign={captionAlign}
+							captionControls={captionControls}
+							captionOverlayRange={captionOverlayRange}
+							captionColor={captionColor}
+							titleClass="featured-title"
+							textClass="featured-text"
+							textContentClass="featured-text-content"
+							lang={lang}
+							backgroundContainer="container"
+						/>
+					</div>
+				))}
+			</div>
+		</section>
+	)
+}
 
 <style
 	lang="css"
@@ -112,10 +116,6 @@ const displayItems = hasItems
 		gapMobile: gapMobileValue,
 		gapHorizontalDesktopValue,
 		gapHorizontalMobileValue,
-		gridBlockMobile,
-		gridBlockDesktop,
-		titleFont,
-		textFont,
 	}}
 >
 	.blockFeatured .grid-default {

@@ -103,7 +103,7 @@ const autoplay = hasControl('autoplay');
 			const autoplay = controls?.includes('autoplay');
 			if (time) {
 				const swiperSlider = blockQuoteSlider.querySelector('.swiperSlider');
-				const swiper = new Swiper(swiperSlider as HTMLElement, {
+				const _swiper = new Swiper(swiperSlider as HTMLElement, {
 					...(autoplay && {
 						autoplay: {
 							delay: parseInt(time),
