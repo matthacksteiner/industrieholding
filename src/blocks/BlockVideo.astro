@@ -190,13 +190,13 @@ const vimeoPlayer =
 	}
 </style>
 
-<script define:vars={{ cursor, aboveFold }}>
+<script define:vars={{ cursor }}>
 	if (cursor) {
 		document.addEventListener('DOMContentLoaded', function () {
 			const video = document.querySelectorAll('video');
 
 			video.forEach((item) => {
-				item.addEventListener('click', (event) => {
+				item.addEventListener('click', () => {
 					if (item.paused) {
 						item.play();
 					} else {
@@ -211,26 +211,26 @@ const vimeoPlayer =
 
 		if ('IntersectionObserver' in window) {
 			const lazyVideoObserver = new IntersectionObserver(function (entries) {
-			entries.forEach(function (video) {
-				if (video.isIntersecting) {
-					for (const source in video.target.children) {
-						const videoSource = video.target.children[source];
-						if (
-							typeof videoSource.tagName === 'string' &&
-							videoSource.tagName === 'SOURCE' &&
-							videoSource.dataset.src &&
-							!videoSource.src
-						) {
-							videoSource.src = videoSource.dataset.src;
+				entries.forEach(function (video) {
+					if (video.isIntersecting) {
+						for (const source in video.target.children) {
+							const videoSource = video.target.children[source];
+							if (
+								typeof videoSource.tagName === 'string' &&
+								videoSource.tagName === 'SOURCE' &&
+								videoSource.dataset.src &&
+								!videoSource.src
+							) {
+								videoSource.src = videoSource.dataset.src;
+							}
 						}
-					}
 
-					video.target.load();
-					video.target.classList.remove('lazy');
-					lazyVideoObserver.unobserve(video.target);
-				}
+						video.target.load();
+						video.target.classList.remove('lazy');
+						lazyVideoObserver.unobserve(video.target);
+					}
+				});
 			});
-		});
 
 			lazyVideos.forEach(function (lazyVideo) {
 				lazyVideoObserver.observe(lazyVideo);

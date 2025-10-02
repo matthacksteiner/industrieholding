@@ -256,23 +256,6 @@ describe('Picture Component', () => {
 		// Note: The base URL isn't prepended in test environment, just the API path is used
 	});
 
-	test('uses Netlify URL as the base URL in Netlify dev environment', async () => {
-		const container = await AstroContainer.create({
-			env: {
-				PROD: false,
-				NETLIFY_DEV: true,
-				NETLIFY_URL: 'https://example.com', // This is what gets used in the test environment
-			},
-		});
-
-		const result = await container.renderToString(Picture, {
-			props: baseProps,
-		});
-
-		// The NETLIFY_URL value from the env is used in srcset URLs
-		// Note: In test environment, base URL handling may differ from production
-	});
-
 	/**
 	 * Performance optimization tests
 	 */

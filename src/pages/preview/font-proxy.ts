@@ -60,7 +60,7 @@ async function handleFontProxy(url: string): Promise<FontProxyResponse> {
 	}
 }
 
-export async function GET({ request, url }): Promise<Response> {
+export async function GET({ url }): Promise<Response> {
 	const fontUrl = url.searchParams.get('url');
 
 	if (!fontUrl) {

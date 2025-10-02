@@ -39,9 +39,9 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 	}
 	import { run } from 'vanilla-cookieconsent';
 	const toggle = (document.querySelector('#cookieButton') as HTMLButtonElement)
-	?.dataset.toggle;
+		?.dataset.toggle;
 	const code = (document.querySelector('#cookieButton') as HTMLButtonElement)
-	?.dataset.code;
+		?.dataset.code;
 	const analyticsLink = (
 		document.querySelector('#cookieButton') as HTMLButtonElement
 	)?.getAttribute('data-analytics-link');
@@ -51,9 +51,6 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 	const currentLang = (
 		document.querySelector('#cookieButton') as HTMLButtonElement
 	)?.getAttribute('data-lang');
-	const defaultLang = (
-		document.querySelector('#cookieButton') as HTMLButtonElement
-	)?.getAttribute('data-default-lang');
 	const prefixDefaultLocale =
 		(
 			document.querySelector('#cookieButton') as HTMLButtonElement
@@ -85,8 +82,7 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 								'<a href="https://marketingplatform.google.com/about/analytics/terms/us/" target="_blank">Google Analytics 4</a>',
 							onAccept: () => {
 								const script = document.createElement('script');
-								script.src =
-									`https://www.googletagmanager.com/gtag/js?id=${  code}`;
+								script.src = `https://www.googletagmanager.com/gtag/js?id=${code}`;
 								script.async = true;
 								document.head.appendChild(script);
 
@@ -99,17 +95,18 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 								gtag('config', code);
 							},
 							onReject: () => {
-								window[`ga-disable-${  code}`] = true;
+								window[`ga-disable-${code}`] = true;
 								const gaCookies = [/^_ga/];
 								gaCookies.forEach((pattern) => {
 									document.cookie.split(';').forEach((cookie) => {
 										const eqPos = cookie.indexOf('=');
 										const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 										if (pattern.test(name)) {
-											document.cookie =
-												`${name 
-											}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${ 
-											location.hostname}`;
+											document.cookie = `${
+												name
+											}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${
+												location.hostname
+											}`;
 										}
 									});
 								});
