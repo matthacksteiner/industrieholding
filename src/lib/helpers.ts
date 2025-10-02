@@ -95,8 +95,28 @@ export function prepareSvgSource(
 ): string {
 	if (!svgSource) return '';
 
+	// Generate a unique ID for this SVG instance
+	const uniqueId = `svg-${Math.random().toString(36).substr(2, 9)}`;
+
+	// First, scope any internal style classes to prevent conflicts
+	let processedSvg = svgSource;
+
+	// Find and process <style> tags
+	processedSvg = processedSvg.replace(
+		/<style([^>]*)>([\s\S]*?)<\/style>/gi,
+		(match, attributes, styleContent) => {
+			// Scope all class selectors by prepending the unique ID
+			const scopedStyles = styleContent.replace(
+				/\.([a-zA-Z0-9_-]+)/g,
+				`.${uniqueId} .$1`
+			);
+			return `<style${attributes}>${scopedStyles}</style>`;
+		}
+	);
+
+	// Add the unique ID as a class to the SVG element
 	// Add viewBox if missing and ensure width/height are set to 100%
-	const svgWithViewBox = svgSource.replace(
+	const svgWithViewBox = processedSvg.replace(
 		/<svg([^>]*)>/i,
 		(match, attributes) => {
 			let newAttributes = attributes;
@@ -120,6 +140,16 @@ export function prepareSvgSource(
 			// If width/height weren't in the original, add them
 			if (!widthMatch) newAttributes += ' width="100%"';
 			if (!heightMatch) newAttributes += ' height="100%"';
+
+			// Add the unique class for scoping styles
+			if (attributes.includes('class=')) {
+				newAttributes = newAttributes.replace(
+					/class\s*=\s*["']([^"']*)["']/i,
+					`class="${uniqueId} $1"`
+				);
+			} else {
+				newAttributes += ` class="${uniqueId}"`;
+			}
 
 			return `<svg${newAttributes}>`;
 		}
