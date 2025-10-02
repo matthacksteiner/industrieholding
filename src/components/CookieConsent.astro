@@ -38,10 +38,10 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 		}
 	}
 	import { run } from 'vanilla-cookieconsent';
-	let toggle = (document.querySelector('#cookieButton') as HTMLButtonElement)
-		?.dataset.toggle;
-	let code = (document.querySelector('#cookieButton') as HTMLButtonElement)
-		?.dataset.code;
+	const toggle = (document.querySelector('#cookieButton') as HTMLButtonElement)
+	?.dataset.toggle;
+	const code = (document.querySelector('#cookieButton') as HTMLButtonElement)
+	?.dataset.code;
 	const analyticsLink = (
 		document.querySelector('#cookieButton') as HTMLButtonElement
 	)?.getAttribute('data-analytics-link');
@@ -86,7 +86,7 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 							onAccept: () => {
 								const script = document.createElement('script');
 								script.src =
-									'https://www.googletagmanager.com/gtag/js?id=' + code;
+									`https://www.googletagmanager.com/gtag/js?id=${  code}`;
 								script.async = true;
 								document.head.appendChild(script);
 
@@ -99,7 +99,7 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 								gtag('config', code);
 							},
 							onReject: () => {
-								window['ga-disable-' + code] = true;
+								window[`ga-disable-${  code}`] = true;
 								const gaCookies = [/^_ga/];
 								gaCookies.forEach((pattern) => {
 									document.cookie.split(';').forEach((cookie) => {
@@ -107,9 +107,9 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 										const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 										if (pattern.test(name)) {
 											document.cookie =
-												name +
-												'=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=' +
-												location.hostname;
+												`${name 
+											}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${ 
+											location.hostname}`;
 										}
 									});
 								});

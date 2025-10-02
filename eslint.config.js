@@ -45,7 +45,8 @@ export default [
 					ignoreRestSiblings: true,
 				},
 			],
-			'@typescript-eslint/no-explicit-any': 'warn',
+			// Disabled because CMS-driven projects need flexible types for dynamic data
+			'@typescript-eslint/no-explicit-any': 'off',
 			'@typescript-eslint/no-non-null-assertion': 'warn',
 
 			// General ESLint rules
@@ -74,7 +75,8 @@ export default [
 			'astro/no-deprecated-astro-canonicalurl': 'error',
 			'astro/no-deprecated-astro-fetchcontent': 'error',
 			'astro/no-deprecated-astro-resolve': 'error',
-			'astro/no-unused-css-selector': 'warn',
+			// Disabled because content is dynamically inserted from CMS via set:html
+			'astro/no-unused-css-selector': 'off',
 		},
 	},
 

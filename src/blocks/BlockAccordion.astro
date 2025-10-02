@@ -77,7 +77,7 @@ const {
 <script>
 	// accordion
 	const acc = document.querySelectorAll<HTMLElement>('.accordion__button');
-	let padding = 150;
+	const padding = 150;
 
 	for (const el of acc) {
 		el.onclick = function (this: HTMLElement) {
@@ -86,12 +86,12 @@ const {
 			}
 
 			this.classList.toggle('active');
-			let panel = this.nextElementSibling as HTMLElement;
+			const panel = this.nextElementSibling as HTMLElement;
 
 			if (panel?.style.maxHeight) {
 				panel.style.maxHeight = '';
 			} else {
-				panel.style.maxHeight = panel.scrollHeight + padding + 'px';
+				panel.style.maxHeight = `${panel.scrollHeight + padding}px`;
 			}
 		};
 	}

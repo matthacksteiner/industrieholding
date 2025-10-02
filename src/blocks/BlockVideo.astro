@@ -207,30 +207,30 @@ const vimeoPlayer =
 		});
 	}
 	document.addEventListener('DOMContentLoaded', function () {
-		let lazyVideos = [].slice.call(document.querySelectorAll('video'));
+		const lazyVideos = [].slice.call(document.querySelectorAll('video'));
 
 		if ('IntersectionObserver' in window) {
-			let lazyVideoObserver = new IntersectionObserver(function (entries) {
-				entries.forEach(function (video) {
-					if (video.isIntersecting) {
-						for (let source in video.target.children) {
-							let videoSource = video.target.children[source];
-							if (
-								typeof videoSource.tagName === 'string' &&
-								videoSource.tagName === 'SOURCE' &&
-								videoSource.dataset.src &&
-								!videoSource.src
-							) {
-								videoSource.src = videoSource.dataset.src;
-							}
+			const lazyVideoObserver = new IntersectionObserver(function (entries) {
+			entries.forEach(function (video) {
+				if (video.isIntersecting) {
+					for (const source in video.target.children) {
+						const videoSource = video.target.children[source];
+						if (
+							typeof videoSource.tagName === 'string' &&
+							videoSource.tagName === 'SOURCE' &&
+							videoSource.dataset.src &&
+							!videoSource.src
+						) {
+							videoSource.src = videoSource.dataset.src;
 						}
-
-						video.target.load();
-						video.target.classList.remove('lazy');
-						lazyVideoObserver.unobserve(video.target);
 					}
-				});
+
+					video.target.load();
+					video.target.classList.remove('lazy');
+					lazyVideoObserver.unobserve(video.target);
+				}
 			});
+		});
 
 			lazyVideos.forEach(function (lazyVideo) {
 				lazyVideoObserver.observe(lazyVideo);

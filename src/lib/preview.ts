@@ -37,7 +37,7 @@ export { isPreviewMode } from '@lib/helpers';
  * @param lang - Optional language code to include in the path
  */
 export function getPreviewPath(path: string, lang?: string): string {
-	if (!path.startsWith('/')) path = '/' + path;
+	if (!path.startsWith('/')) path = `/${  path}`;
 	return lang ? `/preview/${lang}${path}` : `/preview${path}`;
 }
 

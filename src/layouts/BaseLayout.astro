@@ -161,34 +161,34 @@ const googleAnalyticsCode = global.googleAnalyticsCode;
 			}
 		</style>
 		<script>
-			let png192Src = document.querySelector('body')?.dataset.png192src;
-			let png512Src = document.querySelector('body')?.dataset.png512src;
-			let url = document.querySelector('body')?.dataset.url;
-			let color = document.querySelector('body')?.dataset.color;
-			let title = document.querySelector('title')?.innerText;
-			let description = document.querySelector('body')?.dataset.description;
-			let myDynamicManifest = {
-				name: title,
-				short_name: title,
-				description: description,
+			const png192Src = document.querySelector('body')?.dataset.png192src;
+			const png512Src = document.querySelector('body')?.dataset.png512src;
+			const url = document.querySelector('body')?.dataset.url;
+			const color = document.querySelector('body')?.dataset.color;
+			const title = document.querySelector('title')?.innerText;
+			const description = document.querySelector('body')?.dataset.description;
+			const myDynamicManifest = {
+	name: title,
+	short_name: title,
+	description,
 
-				start_url: url,
-				background_color: '#ffffff',
-				theme_color: color,
-				display: 'standalone',
-				icons: [
-					{
-						src: png192Src || url + '/favicons/android-chrome-192x192.png',
-						sizes: '192x192',
-						type: 'image/png',
-					},
-					{
-						src: png512Src || url + '/favicons/android-chrome-512x512.png',
-						sizes: '512x512',
-						type: 'image/png',
-					},
-				],
-			};
+	start_url: url,
+	background_color: '#ffffff',
+	theme_color: color,
+	display: 'standalone',
+	icons: [
+		{
+			src: png192Src || `${url  }/favicons/android-chrome-192x192.png`,
+			sizes: '192x192',
+			type: 'image/png',
+		},
+		{
+			src: png512Src || `${url  }/favicons/android-chrome-512x512.png`,
+			sizes: '512x512',
+			type: 'image/png',
+		},
+	],
+};
 			const stringManifest = JSON.stringify(myDynamicManifest);
 			const blob = new Blob([stringManifest], { type: 'application/json' });
 			const manifestURL = URL.createObjectURL(blob);
