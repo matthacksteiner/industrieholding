@@ -380,11 +380,13 @@ export interface BlockContactFormComponentProps {
 			label?: string;
 			placeholder?: string;
 			help?: string;
+			required?: boolean;
 		};
 		lastname?: {
 			label?: string;
 			placeholder?: string;
 			help?: string;
+			required?: boolean;
 		};
 		email?: {
 			label?: string;
@@ -396,6 +398,7 @@ export interface BlockContactFormComponentProps {
 			placeholder?: string;
 			rows?: number;
 			help?: string;
+			required?: boolean;
 		};
 		submitButton?: {
 			placeholder?: string;
