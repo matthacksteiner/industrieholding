@@ -1,6 +1,5 @@
 // Import the sync function from the Netlify Build Plugin file
-import { performFullSync, performIncrementalSync } from './astro-kirby-sync.js';
-import fs from 'fs';
+import { performFullSync } from './astro-kirby-sync.js';
 import path from 'path';
 import fetch from 'node-fetch';
 

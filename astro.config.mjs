@@ -13,14 +13,14 @@ import netlifyPrettyUrls from './plugins/netlify-pretty-urls/index.js';
 import path from 'path';
 
 const API_URL = process.env.KIRBY_URL;
-const response = await fetch(API_URL + '/global.json');
+const response = await fetch(`${API_URL}/global.json`);
 const global = await response.json();
 const defaultLanguage = global.defaultLang.code;
 const translations = global.translations.map((lang) => lang.code);
 const prefixDefaultLocale = global.prefixDefaultLocale;
 const frontendUrl = global.frontendUrl.endsWith('/')
 	? global.frontendUrl
-	: global.frontendUrl + '/';
+	: `${global.frontendUrl}/`;
 
 // https://astro.build/config
 export default defineConfig({
@@ -39,9 +39,9 @@ export default defineConfig({
 					defaultLocale: defaultLanguage,
 					locales: [defaultLanguage, ...translations],
 					routing: {
-						prefixDefaultLocale: prefixDefaultLocale,
+						prefixDefaultLocale,
 					},
-			  }
+				}
 			: undefined,
 	integrations: [
 		astroKirbySync(),

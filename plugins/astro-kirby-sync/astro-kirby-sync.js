@@ -122,7 +122,8 @@ function hasContentChanged(url, newContent, oldHashes) {
 }
 
 // Check if content needs to be downloaded (either changed or file doesn't exist)
-function needsDownload(
+// Note: This function is currently unused but kept for future optimization opportunities
+function _needsDownload(
 	url,
 	newContent,
 	oldHashes,
@@ -241,7 +242,7 @@ async function performIncrementalLanguageSync(
 				try {
 					fs.unlinkSync(filePath);
 					logger.info(chalk.gray(`  ↳ Removed ${file} from ${lang || 'root'}`));
-				} catch (error) {
+				} catch {
 					// Ignore errors when removing files
 				}
 			}
@@ -327,7 +328,7 @@ async function performFullSync(API_URL, contentDir, logger) {
 	logger.info(
 		chalk.yellow(`\n📥 Syncing default language (${defaultLanguage})...`)
 	);
-	const defaultStats = await performIncrementalLanguageSync(
+	await performIncrementalLanguageSync(
 		API_URL,
 		null,
 		contentDir,
@@ -341,7 +342,7 @@ async function performFullSync(API_URL, contentDir, logger) {
 			`\n📥 Syncing default language to /${defaultLanguage}/ directory...`
 		)
 	);
-	const defaultLangDirStats = await performIncrementalLanguageSync(
+	await performIncrementalLanguageSync(
 		API_URL,
 		defaultLanguage,
 		contentDir,
@@ -354,7 +355,7 @@ async function performFullSync(API_URL, contentDir, logger) {
 		if (lang === defaultLanguage) continue;
 
 		logger.info(chalk.yellow(`\n📥 Syncing language: ${lang}...`));
-		const langStats = await performIncrementalLanguageSync(
+		await performIncrementalLanguageSync(
 			API_URL,
 			lang,
 			contentDir,
@@ -485,8 +486,8 @@ async function performIncrementalSync(API_URL, contentDir, logger) {
 // Main Netlify Build Plugin
 export default {
 	// Before the build starts, restore cache and run the content sync (CRITICAL: must be before Astro build)
-	async onPreBuild({ utils, netlify }) {
-		console.log(
+	async onPreBuild({ utils }) {
+		console.warn(
 			chalk.blue('\n🔄 [Netlify Build Plugin] Restoring sync state cache...')
 		);
 
@@ -497,13 +498,13 @@ export default {
 			await utils.cache.restore(syncStateFile);
 
 			if (fs.existsSync(syncStateFile)) {
-				console.log(
+				console.warn(
 					chalk.green(
 						'✅ [Netlify Build Plugin] Sync state restored from cache'
 					)
 				);
 			} else {
-				console.log(
+				console.warn(
 					chalk.yellow('📦 [Netlify Build Plugin] No cached sync state found')
 				);
 			}
@@ -516,10 +517,10 @@ export default {
 		}
 		// Skip content sync in development mode
 		if (process.env.CONTEXT === 'dev') {
-			console.log(
+			console.warn(
 				chalk.blue('\n🔄 Development mode detected, skipping content sync...')
 			);
-			console.log(
+			console.warn(
 				chalk.gray('Content will be fetched directly from the CMS API')
 			);
 
@@ -530,12 +531,12 @@ export default {
 					const global = await fetchJson(`${API_URL}/global.json`);
 					const isMaintenanceMode = global?.maintenanceToggle === true;
 					if (isMaintenanceMode) {
-						console.log(
+						console.warn(
 							chalk.yellow('🚧 Maintenance mode is bypassed in development')
 						);
 					}
 				}
-			} catch (error) {
+			} catch {
 				// Ignore errors when checking maintenance mode in dev
 			}
 
@@ -543,7 +544,7 @@ export default {
 		}
 
 		// We're in production/build mode - content sync is REQUIRED
-		console.log(
+		console.warn(
 			chalk.blue('\n🔄 Production build detected, running content sync...')
 		);
 
@@ -559,13 +560,13 @@ export default {
 			const forceFullSync = process.env.FORCE_FULL_SYNC === 'true';
 
 			if (forceFullSync) {
-				console.log(
+				console.warn(
 					chalk.yellow('🔄 FORCE_FULL_SYNC enabled, performing full sync...')
 				);
-				await performFullSync(API_URL, contentDir, { info: console.log });
+				await performFullSync(API_URL, contentDir, { info: console.warn });
 			} else {
 				await performIncrementalSync(API_URL, contentDir, {
-					info: console.log,
+					info: console.warn,
 				});
 			}
 		} catch (error) {
@@ -592,8 +593,8 @@ export default {
 	},
 
 	// After the build is done, cache the sync state for future builds
-	async onPostBuild({ utils, netlify }) {
-		console.log(
+	async onPostBuild({ utils }) {
+		console.warn(
 			chalk.blue('\n🔄 [Netlify Build Plugin] Saving sync state to cache...')
 		);
 
@@ -603,13 +604,13 @@ export default {
 			if (fs.existsSync(syncStateFile)) {
 				// Cache the sync state file for future builds
 				await utils.cache.save(syncStateFile);
-				console.log(
+				console.warn(
 					chalk.green(
 						'✅ [Netlify Build Plugin] Sync state cached successfully'
 					)
 				);
 			} else {
-				console.log(
+				console.warn(
 					chalk.yellow('⚠️ [Netlify Build Plugin] No sync state file to cache')
 				);
 			}
