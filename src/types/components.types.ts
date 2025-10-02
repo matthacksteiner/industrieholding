@@ -602,6 +602,8 @@ export interface BlockIconListComponentProps {
 			url: string;
 			alt: string;
 			source: string;
+			width?: number | string;
+			height?: number | string;
 		} | null;
 		linkObject: LinkArray;
 		[key: string]: any;

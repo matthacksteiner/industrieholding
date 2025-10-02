@@ -1,6 +1,10 @@
 ---
 import type { VectorImageComponentProps } from '@app-types/components.types';
-import { getAltFallback, ensureTrailingSlash } from '@lib/helpers';
+import {
+	getAltFallback,
+	ensureTrailingSlash,
+	prepareSvgSource,
+} from '@lib/helpers';
 
 const { image, widthMobile, widthDesktop, noLink, widthAlign } =
 	Astro.props as VectorImageComponentProps;
@@ -19,8 +23,8 @@ const imageProps = {
 		widthAlign === 'start' || widthAlign === 'normal'
 			? 'mr-auto'
 			: widthAlign === 'center'
-			? 'mx-auto'
-			: widthAlign === 'end' && 'ml-auto',
+				? 'mx-auto'
+				: widthAlign === 'end' && 'ml-auto',
 		classes,
 	].filter(Boolean),
 };
@@ -31,8 +35,8 @@ const svgClasses = [
 	widthAlign === 'start' || widthAlign === 'normal'
 		? 'mr-auto'
 		: widthAlign === 'center'
-		? 'mx-auto'
-		: widthAlign === 'end' && 'ml-auto',
+			? 'mx-auto'
+			: widthAlign === 'end' && 'ml-auto',
 	classes,
 ]
 	.filter(Boolean)
@@ -43,47 +47,6 @@ const svgClasses = [
 	() => {
 		if (!image) return null;
 
-		// Prepare SVG source for better inline rendering
-		const prepareSvgSource = (svgSource) => {
-			if (!svgSource) return '';
-
-			// Add viewBox if missing and ensure width/height are set to 100%
-			const svgWithViewBox = svgSource.replace(
-				/<svg([^>]*)>/i,
-				(match, attributes) => {
-					let newAttributes = attributes;
-
-					// Extract original width and height if present
-					const widthMatch = attributes.match(
-						/\bwidth\s*=\s*["']([^"']*)["']/i
-					);
-					const heightMatch = attributes.match(
-						/\bheight\s*=\s*["']([^"']*)["']/i
-					);
-					const origWidth = widthMatch ? widthMatch[1] : image?.width;
-					const origHeight = heightMatch ? heightMatch[1] : image?.height;
-
-					// If no viewBox but has width/height, add viewBox
-					if (!attributes.includes('viewBox') && origWidth && origHeight) {
-						newAttributes += ` viewBox="0 0 ${origWidth} ${origHeight}"`;
-					}
-
-					// Set width and height to 100%
-					newAttributes = newAttributes
-						.replace(/\bwidth\s*=\s*["'][^"']*["']/i, 'width="100%"')
-						.replace(/\bheight\s*=\s*["'][^"']*["']/i, 'height="100%"');
-
-					// If width/height weren't in the original, add them
-					if (!widthMatch) newAttributes += ' width="100%"';
-					if (!heightMatch) newAttributes += ' height="100%"';
-
-					return `<svg${newAttributes}>`;
-				}
-			);
-
-			return svgWithViewBox;
-		};
-
 		// Function to render inline SVG
 		const renderSvg = () => {
 			if (image.source) {
@@ -91,7 +54,11 @@ const svgClasses = [
 					<div
 						class={svgClasses}
 						id={image.identifier}
-						set:html={prepareSvgSource(image.source)}
+						set:html={prepareSvgSource(
+							image.source,
+							image?.width,
+							image?.height
+						)}
 						aria-label={image.alt || 'Decorative image'}
 						role="img"
 					/>
@@ -218,7 +185,7 @@ const svgClasses = [
 	}
 
 	/* Make sure SVGs take up 100% of their container */
-	div[role='img'] svg {
+	div[role='img'] :global(svg) {
 		@apply block h-full w-full;
 	}
 
