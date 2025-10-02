@@ -80,3 +80,50 @@ export function ensureTrailingSlash(
 	// Ensure trailing slash for internal page links
 	return url.endsWith('/') ? url : `${url}/`;
 }
+
+/**
+ * Prepares SVG source for better inline rendering by adding viewBox and setting dimensions
+ * @param svgSource - The SVG source code to process
+ * @param fallbackWidth - Optional fallback width if not found in SVG attributes
+ * @param fallbackHeight - Optional fallback height if not found in SVG attributes
+ * @returns Processed SVG source with viewBox and 100% dimensions
+ */
+export function prepareSvgSource(
+	svgSource: string,
+	fallbackWidth?: number | string,
+	fallbackHeight?: number | string
+): string {
+	if (!svgSource) return '';
+
+	// Add viewBox if missing and ensure width/height are set to 100%
+	const svgWithViewBox = svgSource.replace(
+		/<svg([^>]*)>/i,
+		(match, attributes) => {
+			let newAttributes = attributes;
+
+			// Extract original width and height if present
+			const widthMatch = attributes.match(/\bwidth\s*=\s*["']([^"']*)["']/i);
+			const heightMatch = attributes.match(/\bheight\s*=\s*["']([^"']*)["']/i);
+			const origWidth = widthMatch ? widthMatch[1] : fallbackWidth;
+			const origHeight = heightMatch ? heightMatch[1] : fallbackHeight;
+
+			// If no viewBox but has width/height, add viewBox
+			if (!attributes.includes('viewBox') && origWidth && origHeight) {
+				newAttributes += ` viewBox="0 0 ${origWidth} ${origHeight}"`;
+			}
+
+			// Set width and height to 100%
+			newAttributes = newAttributes
+				.replace(/\bwidth\s*=\s*["'][^"']*["']/i, 'width="100%"')
+				.replace(/\bheight\s*=\s*["'][^"']*["']/i, 'height="100%"');
+
+			// If width/height weren't in the original, add them
+			if (!widthMatch) newAttributes += ' width="100%"';
+			if (!heightMatch) newAttributes += ' height="100%"';
+
+			return `<svg${newAttributes}>`;
+		}
+	);
+
+	return svgWithViewBox;
+}
