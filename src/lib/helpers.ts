@@ -132,7 +132,7 @@ export function prepareSvgSource(
 				newAttributes += ` viewBox="0 0 ${origWidth} ${origHeight}"`;
 			}
 
-			// Set width and height to 100%
+			// Set width and height to 100% but preserve aspect ratio
 			newAttributes = newAttributes
 				.replace(/\bwidth\s*=\s*["'][^"']*["']/i, 'width="100%"')
 				.replace(/\bheight\s*=\s*["'][^"']*["']/i, 'height="100%"');
@@ -140,6 +140,11 @@ export function prepareSvgSource(
 			// If width/height weren't in the original, add them
 			if (!widthMatch) newAttributes += ' width="100%"';
 			if (!heightMatch) newAttributes += ' height="100%"';
+
+			// Add preserveAspectRatio to maintain consistent sizing
+			if (!attributes.includes('preserveAspectRatio')) {
+				newAttributes += ' preserveAspectRatio="xMidYMid meet"';
+			}
 
 			// Add the unique class for scoping styles
 			if (attributes.includes('class=')) {

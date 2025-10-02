@@ -122,4 +122,12 @@ const {
 	.link {
 		column-gap: calc(var(--iconListGap) * 1px);
 	}
+
+	/* Ensure SVG icons maintain consistent size and aspect ratio */
+	.icon {
+		@apply flex-shrink-0;
+	}
+	.icon :global(svg) {
+		@apply block h-full w-full object-contain;
+	}
 </style>
