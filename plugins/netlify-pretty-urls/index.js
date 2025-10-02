@@ -1,6 +1,6 @@
 import netlifyPrettyUrlsSetup from './netlifyPrettyUrls.js';
 
-export default function netlifyPrettyUrls(options = {}) {
+export default function netlifyPrettyUrls() {
 	return {
 		name: 'netlify-pretty-urls',
 		hooks: {

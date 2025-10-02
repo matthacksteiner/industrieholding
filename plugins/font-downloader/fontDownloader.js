@@ -50,7 +50,7 @@ export default function fontDownloader() {
 							`Fetching font data from: ${API_URL}`
 						)}`
 					);
-					const response = await fetch(API_URL + '/global.json');
+					const response = await fetch(`${API_URL}/global.json`);
 					if (!response.ok) {
 						logger.error(
 							`${pluginName} ${chalk.red('✖')} Failed to fetch global.json: ${

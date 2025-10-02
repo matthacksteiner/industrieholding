@@ -19,7 +19,7 @@ export default function langFolderRename() {
 						return;
 					}
 
-					const response = await fetch(API_URL + '/global.json');
+					const response = await fetch(`${API_URL}/global.json`);
 					const global = await response.json();
 					const translations = global.translations;
 

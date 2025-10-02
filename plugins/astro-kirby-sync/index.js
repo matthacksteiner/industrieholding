@@ -36,7 +36,7 @@ export default function astroKirbySync() {
 						if (isMaintenanceMode) {
 							logger.warn('🚧 Maintenance mode is bypassed in development');
 						}
-					} catch (error) {
+					} catch {
 						// Ignore errors when checking maintenance mode in dev
 					}
 

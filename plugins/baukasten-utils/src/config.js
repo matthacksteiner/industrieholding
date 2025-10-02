@@ -29,8 +29,6 @@ export function mergeOptions(defaultOptions, userOptions = {}) {
  */
 export function createPluginConfig({
 	name,
-	emoji,
-	color,
 	hooks = {},
 	defaultOptions = {},
 	setup = null,
