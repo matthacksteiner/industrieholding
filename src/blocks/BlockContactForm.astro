@@ -33,11 +33,25 @@ const uniqueFormName = metadata?.identifier
 // Extract field configurations with defaults
 const firstnameConfig = fields.firstname || {};
 const lastnameConfig = fields.lastname || {};
-const emailConfig = fields.email || { label: 'E-Mail' };
+const emailConfig = fields.email || {};
 const messageConfig = fields.message || {};
 const submitButtonConfig = fields.submitButton || {};
 const successMessageConfig = fields.successMessage || {};
 const errorMessageConfig = fields.errorMessage || {};
+
+// Ensure at least placeholder exists for field detection
+if (!firstnameConfig.label && !firstnameConfig.placeholder) {
+	firstnameConfig.placeholder = 'First Name';
+}
+if (!lastnameConfig.label && !lastnameConfig.placeholder) {
+	lastnameConfig.placeholder = 'Last Name';
+}
+if (!emailConfig.label && !emailConfig.placeholder) {
+	emailConfig.placeholder = 'Email';
+}
+if (!messageConfig.label && !messageConfig.placeholder) {
+	messageConfig.placeholder = 'Your message';
+}
 
 // Calculate styling variables
 const textFont = textGroup?.textfont || global.textFont;
@@ -171,8 +185,14 @@ const alignClass = {
 						return (
 							<div class:list={['flex', gapClass]}>
 								<div class="form-field flex-1">
-									<label for={`${formId}-firstname`} class="form-label">
-										{firstnameConfig.label}
+									<label
+										for={`${formId}-firstname`}
+										class:list={[
+											'form-label',
+											!firstnameConfig.label && 'sr-only',
+										]}
+									>
+										{firstnameConfig.label || 'First Name'}
 									</label>
 									<input
 										type="text"
@@ -187,8 +207,14 @@ const alignClass = {
 									)}
 								</div>
 								<div class="form-field flex-1">
-									<label for={`${formId}-lastname`} class="form-label">
-										{lastnameConfig.label}
+									<label
+										for={`${formId}-lastname`}
+										class:list={[
+											'form-label',
+											!lastnameConfig.label && 'sr-only',
+										]}
+									>
+										{lastnameConfig.label || 'Last Name'}
 									</label>
 									<input
 										type="text"
@@ -207,8 +233,14 @@ const alignClass = {
 					} else if (firstnameActive) {
 						return (
 							<div class="form-field">
-								<label for={`${formId}-firstname`} class="form-label">
-									{firstnameConfig.label}
+								<label
+									for={`${formId}-firstname`}
+									class:list={[
+										'form-label',
+										!firstnameConfig.label && 'sr-only',
+									]}
+								>
+									{firstnameConfig.label || 'First Name'}
 								</label>
 								<input
 									type="text"
@@ -226,8 +258,14 @@ const alignClass = {
 					} else if (lastnameActive) {
 						return (
 							<div class="form-field">
-								<label for={`${formId}-lastname`} class="form-label">
-									{lastnameConfig.label}
+								<label
+									for={`${formId}-lastname`}
+									class:list={[
+										'form-label',
+										!lastnameConfig.label && 'sr-only',
+									]}
+								>
+									{lastnameConfig.label || 'Last Name'}
 								</label>
 								<input
 									type="text"
@@ -249,13 +287,12 @@ const alignClass = {
 
 			<!-- Email field -->
 			<div class="form-field">
-				{
-					emailConfig.label && (
-						<label for={`${formId}-email`} class="form-label">
-							{emailConfig.label}
-						</label>
-					)
-				}
+				<label
+					for={`${formId}-email`}
+					class:list={['form-label', !emailConfig.label && 'sr-only']}
+				>
+					{emailConfig.label || 'Email'}
+				</label>
 				<input
 					type="email"
 					id={`${formId}-email`}
@@ -266,16 +303,14 @@ const alignClass = {
 				/>
 				{emailConfig.help && <p class="form-help">{emailConfig.help}</p>}
 			</div>
-
 			<!-- Message field -->
 			<div class="form-field">
-				{
-					messageConfig.label && (
-						<label for={`${formId}-message`} class="form-label">
-							{messageConfig.label}
-						</label>
-					)
-				}
+				<label
+					for={`${formId}-message`}
+					class:list={['form-label', !messageConfig.label && 'sr-only']}
+				>
+					{messageConfig.label || 'Message'}
+				</label>
 				<textarea
 					id={`${formId}-message`}
 					name="message"
@@ -374,6 +409,11 @@ const alignClass = {
 
 	.form-label {
 		@apply mb-2 block font-medium;
+	}
+
+	/* When label has sr-only, remove the margin since it's hidden */
+	.form-label.sr-only {
+		@apply mb-0;
 	}
 
 	.form-input {
