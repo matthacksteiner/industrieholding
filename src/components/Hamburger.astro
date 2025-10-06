@@ -27,6 +27,8 @@ const logoAlign = global.logoAlign;
 				logoAlign === 'left' && 'lg:hidden',
 			]}
 			aria-label="hamburger-button"
+			aria-expanded="false"
+			aria-controls="mobile-navigation-menu"
 			type="button"
 		>
 			<div class={`c-hamburger-inner`}>
@@ -38,6 +40,7 @@ const logoAlign = global.logoAlign;
 	) : null
 }
 <div
+	id="mobile-navigation-menu"
 	class:list={[
 		'mobile-nav-list',
 		`hamburgerFontColorCurrent--${global.hamburgerFontColorCurrent}`,
@@ -155,6 +158,11 @@ const logoAlign = global.logoAlign;
 	hamburger?.addEventListener('click', () => {
 		menu?.classList.toggle('expanded');
 		hamburger?.classList.toggle('active');
+
+		// Toggle aria-expanded
+		const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+		hamburger.setAttribute('aria-expanded', String(!isExpanded));
+
 		if (body) {
 			body.style.overflowY =
 				body.style.overflowY === 'hidden' ? 'auto' : 'hidden';
@@ -165,6 +173,10 @@ const logoAlign = global.logoAlign;
 		link.addEventListener('click', () => {
 			menu?.classList.remove('expanded');
 			hamburger?.classList.remove('active');
+
+			// Set aria-expanded to false when closing
+			hamburger?.setAttribute('aria-expanded', 'false');
+
 			if (body) {
 				body.style.overflowY =
 					body.style.overflowY === 'hidden' ? 'auto' : 'hidden';

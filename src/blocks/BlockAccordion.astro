@@ -38,37 +38,44 @@ const {
 <div id={metadata?.identifier || undefined} class:list={['blocks', 'blockAccordion', metadata?.classes]}{...metadata?.attributes }>
 	{
 		Array.isArray(items) && items.length > 0
-			? items.map((item) => (
-					<div class:list={['service', 'accordion__item', `borderColor--${borderColor}`, 'py-4']}>
-						{item.text ? (
-							<button
-								class:list={['accordion__button', 'flex', 'w-full', 'items-center', 'justify-between', `font--${titleSize}`, `text--${titleColor}`]}
-								aria-label="Akkordion öffnen oder schließen"
-							>
-								<Level level={headingLevel} set:html={item.title} class:list={['title', 'text-left']} />
-								<span class="transition-all duration-300">&#8595;</span>
-							</button>
-							<div class="accordion__panel max-h-0 max-w-[95%] overflow-hidden transition-all duration-300">
+			? items.map((item, index) => {
+					const accordionId = `accordion-${metadata?.identifier || 'block'}-${index}`;
+					const panelId = `accordion-panel-${metadata?.identifier || 'block'}-${index}`;
+					return (
+						<div class:list={['service', 'accordion__item', `borderColor--${borderColor}`, 'py-4']}>
+							{item.text ? (
+								<button
+									id={accordionId}
+									class:list={['accordion__button', 'flex', 'w-full', 'items-center', 'justify-between', `font--${titleSize}`, `text--${titleColor}`]}
+									aria-label="Akkordion öffnen oder schließen"
+									aria-expanded="false"
+									aria-controls={panelId}
+								>
+									<Level level={headingLevel} set:html={item.title} class:list={['title', 'text-left']} />
+									<span class="transition-all duration-300">&#8595;</span>
+								</button>
+								<div id={panelId} class="accordion__panel max-h-0 max-w-[95%] overflow-hidden transition-all duration-300">
+									<div
+										set:html={item.text}
+										class:list={['text', 'kirby-text', `font--${textSize}`, `text--${textColor}`, `text--${textAlign}`, 'pt-4']}
+										data-h1Size={h1Size}
+										data-h2Size={h2Size}
+										data-h3Size={h3Size}
+										data-h4Size={h4Size}
+										data-h5Size={h5Size}
+										data-h6Size={h6Size}
+									/>
+								</div>
+							) : (
 								<div
-									set:html={item.text}
-									class:list={['text', 'kirby-text', `font--${textSize}`, `text--${textColor}`, `text--${textAlign}`, 'pt-4']}
-									data-h1Size={h1Size}
-									data-h2Size={h2Size}
-									data-h3Size={h3Size}
-									data-h4Size={h4Size}
-									data-h5Size={h5Size}
-									data-h6Size={h6Size}
-								/>
-							</div>
-						) : (
-							<div
-								class:list={['flex', 'w-full', 'items-center', 'justify-between', `font--${titleSize}`, `text--${titleColor}`]}
-							>
-								<Level level={headingLevel} set:html={item.title} class:list={['title']} />
-							</div>
-						)}
-					</div>
-			  ))
+									class:list={['flex', 'w-full', 'items-center', 'justify-between', `font--${titleSize}`, `text--${titleColor}`]}
+								>
+									<Level level={headingLevel} set:html={item.title} class:list={['title']} />
+								</div>
+							)}
+						</div>
+					);
+			  })
 			: null
 	}
 </div>
@@ -88,6 +95,10 @@ const {
 			this.classList.toggle('active');
 			const panel = this.nextElementSibling as HTMLElement;
 
+			// Toggle aria-expanded
+			const isExpanded = this.getAttribute('aria-expanded') === 'true';
+			this.setAttribute('aria-expanded', String(!isExpanded));
+
 			if (panel?.style.maxHeight) {
 				panel.style.maxHeight = '';
 			} else {
@@ -99,6 +110,7 @@ const {
 	function closeAll() {
 		for (const el of acc) {
 			el.classList.remove('active');
+			el.setAttribute('aria-expanded', 'false');
 			const nextSibling = el.nextElementSibling;
 			if (nextSibling instanceof HTMLElement) {
 				nextSibling.style.maxHeight = '';
