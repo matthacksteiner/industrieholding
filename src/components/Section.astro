@@ -1,5 +1,6 @@
 ---
 import type { SectionComponentProps } from '@app-types/components.types';
+import type { SectionItem, Language } from '@app-types/api.types';
 import { toRem } from '@lib/helpers';
 import Layouts from '@components/Layouts.astro';
 import SectionImage from '@components/SectionImage.astro';
@@ -54,11 +55,9 @@ const gapVerticalDesktop = toRem(gap);
 const gapVerticalMobile = toRem(gapMobile);
 const gapHorizontalDesktop = toRem(gapHorizontal);
 const gapHorizontalMobileValue = toRem(gapHorizontalMobile);
-const gridBlockMobile = toRem(global.gridBlockMobile);
-const gridBlockDesktop = toRem(global.gridBlockDesktop);
 
 const pathname = Astro.url.pathname.split('/');
-const translations = global.translations.map((lang) => lang.code);
+const translations = global.translations.map((lang: Language) => lang.code);
 const prefixDefaultLocale = global.prefixDefaultLocale;
 const currentLang = data.lang;
 const defaultLang = global.defaultLang.code;
@@ -84,9 +83,17 @@ const firstPath =
 	<div class="grid-default">
 		{
 			pageItems
-				.filter((item) => item.status === 'listed')
-				.sort((a, b) => a.position - b.position)
-				.map((item) => (
+				.filter(
+					(item: SectionItem & { status?: string; position?: number }) =>
+						item.status === 'listed'
+				)
+				.sort(
+					(
+						a: SectionItem & { status?: string; position?: number },
+						b: SectionItem & { status?: string; position?: number }
+					) => (a.position || 0) - (b.position || 0)
+				)
+				.map((item: SectionItem) => (
 					<div
 						class:list={[
 							`section-item`,

@@ -24,7 +24,7 @@ const {
 	metadata,
 	aboveFold,
 } = Astro.props as BlockVideoComponentProps;
-const hasOption = (option) => options.includes(option);
+const hasOption = (option: string) => options.includes(option);
 
 const autoplay = hasOption('autoplay');
 const loop = hasOption('loop');
@@ -113,7 +113,6 @@ const vimeoPlayer =
 								}&loop=${loop ? 1 : 0}&muted=${
 									muted || autoplay ? 1 : 0
 								}&controls=${controls ? 1 : 0}&dnt=1`}
-								frameborder="0"
 								allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
 								style="position:absolute;top:0;left:0;width:100%;height:100%;"
 								title="Vimeo video player"
@@ -190,7 +189,7 @@ const vimeoPlayer =
 	}
 </style>
 
-<script define:vars={{ cursor }}>
+<script is:inline define:vars={{ cursor }}>
 	if (cursor) {
 		document.addEventListener('DOMContentLoaded', function () {
 			const video = document.querySelectorAll('video');

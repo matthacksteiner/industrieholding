@@ -100,7 +100,8 @@ const prefixDefaultLocale = global.prefixDefaultLocale;
 								gaCookies.forEach((pattern) => {
 									document.cookie.split(';').forEach((cookie) => {
 										const eqPos = cookie.indexOf('=');
-										const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+										const name =
+											eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
 										if (pattern.test(name)) {
 											document.cookie = `${
 												name

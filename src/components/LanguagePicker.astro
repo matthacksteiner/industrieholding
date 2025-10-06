@@ -12,14 +12,8 @@ import {
 import { checkIsHome } from '@lib/helpers';
 
 // Get language context
-const {
-	defaultLang,
-	allLangs,
-	translations,
-	prefixDefaultLocale,
-	currentLang,
-	selectedLang,
-} = await getLanguageContext(lang);
+const { allLangs, translations, currentLang, selectedLang } =
+	await getLanguageContext(lang);
 
 // UI-related props from global
 const headerFont = global.headerFont;

@@ -23,7 +23,7 @@ const {
 
 // Generate unique ID for this form instance
 const formId =
-	metadata?.identifier || `form-${Math.random().toString(36).substr(2, 9)}`;
+	metadata?.identifier || `form-${Math.random().toString(36).slice(2, 11)}`;
 
 // Ensure unique form name for Netlify Forms when multiple forms exist
 const uniqueFormName = metadata?.identifier

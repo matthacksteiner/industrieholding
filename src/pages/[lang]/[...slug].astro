@@ -1,12 +1,7 @@
 ---
 import PageRenderer from '@components/PageRenderer.astro';
 import { getPage, getData, getAllPages } from '@lib/api';
-import type { GlobalData, PageData } from '@app-types/api.types';
-
-// Extend the PageData with optional translations property
-type PageWithTranslations = PageData & {
-	translations?: Record<string, string>;
-};
+import type { GlobalData } from '@app-types/api.types';
 
 interface StaticPath {
 	params: { lang: string; slug: string };

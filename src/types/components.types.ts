@@ -143,11 +143,12 @@ export interface CardContentComponentProps {
 	text?: string;
 	image?: any;
 	hovertoggle?: boolean;
-	hovertext?: string;
 	justify?: string;
 	Level?: string;
+	titleFont?: string;
 	titleSize?: string;
 	titleAlign?: string;
+	textFont?: string;
 	textSize?: string;
 	textAlign?: string;
 	widthMobile?: string;

@@ -16,10 +16,9 @@ const {
 	time,
 	metadata,
 } = Astro.props as BlockQuoteSliderComponentProps;
-const hasControl = (control) => controls && controls.includes(control);
+const hasControl = (control: string) => controls && controls.includes(control);
 const arrows = hasControl('arrows');
 const dots = hasControl('dots');
-const autoplay = hasControl('autoplay');
 ---
 
 <sections
@@ -103,7 +102,7 @@ const autoplay = hasControl('autoplay');
 			const autoplay = controls?.includes('autoplay');
 			if (time) {
 				const swiperSlider = blockQuoteSlider.querySelector('.swiperSlider');
-				const _swiper = new Swiper(swiperSlider as HTMLElement, {
+				new Swiper(swiperSlider as HTMLElement, {
 					...(autoplay && {
 						autoplay: {
 							delay: parseInt(time),

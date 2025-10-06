@@ -59,7 +59,6 @@ interface Props extends ImageProps {
 	ratioDesktop: string;
 	span: string;
 	// Layout and positioning options
-	position?: string;
 	backgroundContainer?: 'container' | 'full';
 	gridMarginDesktop?: number;
 	gridMarginMobile?: number;
@@ -77,12 +76,6 @@ interface Props extends ImageProps {
 // --------------------------------------
 const isProduction = import.meta.env.PROD;
 const isNetlifyDev = Boolean(import.meta.env.NETLIFY_DEV);
-const netlifyUrl = import.meta.env.NETLIFY_URL;
-const baseUrl = isProduction
-	? netlifyUrl
-	: isNetlifyDev
-	? 'http://localhost:8888'
-	: netlifyUrl;
 
 // Should we use Netlify Image processing?
 const useNetlifyImageProcessing = isProduction || isNetlifyDev;
@@ -90,7 +83,6 @@ const useNetlifyImageProcessing = isProduction || isNetlifyDev;
 // --------------------------------------
 // Layout Constants
 // --------------------------------------
-const scrollbarWidth = 17;
 const maxContainerWidth = 1920;
 const mobileBreakpoint = 'lg';
 
@@ -157,11 +149,10 @@ const {
 	span,
 	// Optional props with defaults
 	alt,
-	position = 'center',
 	id,
 	class: className,
 	loading = 'lazy',
-	backgroundContainer = 'container',
+	// backgroundContainer = 'container', // Not currently used
 	gridMarginDesktop = 24,
 	gridMarginMobile = 16,
 	gridGapDesktop = 24,
@@ -206,33 +197,6 @@ function getRatio(ratio: string, width: number, height: number): number {
 	const [numerator, denominator] =
 		ratio === 'original' ? [width, height] : ratio.split('/');
 	return Number(numerator) / Number(denominator);
-}
-
-// --------------------------------------
-// Grid and Container Width Calculations
-// --------------------------------------
-function getContainerWidth(
-	screenRange: (typeof screenRanges)[0],
-	isMobile: boolean,
-	gridMarginTotal: number
-) {
-	let containerWidth = screenRange.maxWidth - scrollbarWidth;
-	// Apply margin subtraction for both mobile and desktop containers
-	if (backgroundContainer === 'container' || isMobile) {
-		containerWidth =
-			Math.min(containerWidth, maxContainerWidth) - gridMarginTotal;
-	}
-	return containerWidth;
-}
-
-function calculateColumnWidth(
-	containerWidth: number,
-	columns: number,
-	gridGap: number
-): number {
-	const totalGapSpace = gridGap * (columns - 1);
-	const availableSpace = containerWidth - totalGapSpace;
-	return availableSpace / columns;
 }
 
 // --------------------------------------
@@ -301,10 +265,6 @@ function createProductionSrcSet(
 	screenRange: (typeof screenRanges)[0],
 	isMobile: boolean
 ): string {
-	const columns = isMobile ? 6 : 12;
-	const gridGap = isMobile ? gridGapMobile : gridGapDesktop;
-	const gridMargin = isMobile ? gridMarginMobileTotal : gridMarginDesktopTotal;
-	const containerWidth = getContainerWidth(screenRange, isMobile, gridMargin);
 	const ratio = isMobile ? ratioMobileValue : ratioDesktopValue;
 	const screenWidth = screenRange.maxWidth;
 
@@ -312,28 +272,9 @@ function createProductionSrcSet(
 		.map((dpr) => {
 			const imgWidth = calculateResponsiveImageWidth(screenWidth, span) * dpr;
 			const imgHeight = calculateImageHeight(imgWidth, ratio);
-			const quality = dpr === 1 ? 75 : dpr === 2 ? 70 : 60;
 			return `${createNetlifyImageUrl(source, imgWidth, imgHeight)} ${dpr}x`;
 		})
 		.join(', ');
-}
-
-function createProductionImageSrc(
-	source: string,
-	screenRange: (typeof screenRanges)[0],
-	isMobile: boolean
-): string {
-	const columns = isMobile ? 6 : 12;
-	const gridGap = isMobile ? gridGapMobile : gridGapDesktop;
-	const gridMargin = isMobile ? gridMarginMobileTotal : gridMarginDesktopTotal;
-	const containerWidth = getContainerWidth(screenRange, isMobile, gridMargin);
-	const ratio = isMobile ? ratioMobileValue : ratioDesktopValue;
-	const screenWidth = screenRange.maxWidth;
-
-	const width = calculateResponsiveImageWidth(screenWidth, span);
-	const height = calculateImageHeight(width, ratio);
-
-	return createNetlifyImageUrl(source, width, height);
 }
 
 // --------------------------------------
@@ -368,16 +309,7 @@ const fetchPriority = aboveFold
 // --------------------------------------
 // Find the smallest breakpoint for fallback image
 const smallestScreenRange = screenRanges[0];
-const isMobile = true; // Use mobile dimensions for fallback
-const gridGap = isMobile ? gridGapMobile : gridGapDesktop;
-const gridMargin = isMobile ? gridMarginMobileTotal : gridMarginDesktopTotal;
-const smallestContainerWidth = getContainerWidth(
-	smallestScreenRange,
-	isMobile,
-	gridMargin
-);
-const columns = isMobile ? 6 : 12;
-const ratio = isMobile ? ratioMobileValue : ratioDesktopValue;
+const ratio = ratioMobileValue; // Use mobile ratio for fallback
 const smallestScreenWidth = smallestScreenRange.maxWidth;
 
 // Calculate the smallest image size for fallback

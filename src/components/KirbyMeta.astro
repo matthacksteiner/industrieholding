@@ -1,11 +1,10 @@
 ---
 import type { KirbyMetaComponentProps } from '@app-types/components.types';
 
-const { data, global, pageTitle } = Astro.props as KirbyMetaComponentProps;
+const { data, global } = Astro.props as KirbyMetaComponentProps;
 const socialMeta = data.meta.social;
 const kirbyUrl = global.kirbyUrl;
 const currentOrigin = Astro.url.origin;
-const separators = data.meta.separators || '|';
 const siteTitle = global.siteTitle;
 const orgOrPerson = data.meta.org || data.meta.person;
 ---
@@ -30,7 +29,7 @@ const orgOrPerson = data.meta.org || data.meta.person;
 }
 <link rel="sitemap" href={kirbyUrl + '/sitemap.xml'} />
 
-<script define:vars={{ orgOrPerson, siteTitle, currentOrigin }}>
+<script is:inline define:vars={{ orgOrPerson, siteTitle, currentOrigin }}>
 	if (!orgOrPerson) return;
 	const script = document.createElement('script');
 	script.setAttribute('type', 'application/ld+json');

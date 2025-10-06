@@ -1,18 +1,13 @@
 ---
-import { toRem } from '@lib/helpers';
 import type { BlockDividerComponentProps } from '@app-types/components.types';
 
 const {
-	global,
 	spacingMobileTop,
 	spacingMobileBottom,
 	spacingDesktopTop,
 	spacingDesktopBottom,
 	metadata,
 } = Astro.props as BlockDividerComponentProps;
-
-const gridBlockMobile = toRem(global.gridBlockMobile) || '1rem';
-const gridBlockDesktop = toRem(global.gridBlockDesktop) || '1rem';
 ---
 
 <div
