@@ -8,7 +8,6 @@ const {
 	text,
 	image,
 	hovertoggle,
-	hovertext,
 	justify,
 	Level: headingLevel,
 	titleSize,
@@ -18,6 +17,8 @@ const {
 	widthMobile,
 	widthDesktop,
 	widthAlign,
+	titleFont,
+	textFont,
 } = Astro.props as CardContentComponentProps;
 ---
 
@@ -80,7 +81,7 @@ const {
 	}
 </div>
 
-<style lang="css">
+<style lang="css" define:vars={{ titleFont, textFont }}>
 	.card-main-content {
 		/* safari workaround */
 		height: -webkit-fill-available;

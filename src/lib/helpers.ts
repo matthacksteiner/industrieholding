@@ -96,7 +96,7 @@ export function prepareSvgSource(
 	if (!svgSource) return '';
 
 	// Generate a unique ID for this SVG instance
-	const uniqueId = `svg-${Math.random().toString(36).substr(2, 9)}`;
+	const uniqueId = `svg-${Math.random().toString(36).slice(2, 11)}`;
 
 	// First, scope any internal style classes to prevent conflicts
 	let processedSvg = svgSource;
@@ -104,7 +104,7 @@ export function prepareSvgSource(
 	// Find and process <style> tags
 	processedSvg = processedSvg.replace(
 		/<style([^>]*)>([\s\S]*?)<\/style>/gi,
-		(match, attributes, styleContent) => {
+		(_match, attributes, styleContent) => {
 			// Scope all class selectors by prepending the unique ID
 			const scopedStyles = styleContent.replace(
 				/\.([a-zA-Z0-9_-]+)/g,
@@ -118,7 +118,7 @@ export function prepareSvgSource(
 	// Add viewBox if missing and ensure width/height are set to 100%
 	const svgWithViewBox = processedSvg.replace(
 		/<svg([^>]*)>/i,
-		(match, attributes) => {
+		(_match, attributes) => {
 			let newAttributes = attributes;
 
 			// Extract original width and height if present

@@ -19,8 +19,15 @@ const effectiveLang = lang || currentLang;
 const logoAlign = global.logoAlign;
 const isPreview = isPreviewMode();
 
+// Type for nav link item
+type NavLinkItem = NonNullable<typeof links>[number];
+
 // Utility function for common classes
-const getCommonClasses = (item, isActive, isLast) => [
+const getCommonClasses = (
+	item: NavLinkItem,
+	isActive: boolean,
+	isLast: boolean
+) => [
 	'nav-link',
 	'max-lg:mb-8',
 	logoAlign === 'center' ? 'lg:my-2' : 'lg:mr-16 2xl:mr-24',
@@ -47,25 +54,35 @@ const getCommonClasses = (item, isActive, isLast) => [
 			let href = isUrl
 				? item.href
 				: item.hash
-				? `${shouldIncludeLanguage ? '/' + effectiveLang + '/' : '/'}#${item.hash}`
-				: shouldIncludeLanguage
-				? ensureTrailingSlash(`/${effectiveLang}/${item.uri}`)
-				: ensureTrailingSlash(`/${item.uri}`);
+					? `${shouldIncludeLanguage ? '/' + effectiveLang + '/' : '/'}#${item.hash}`
+					: shouldIncludeLanguage
+						? ensureTrailingSlash(`/${effectiveLang}/${item.uri}`)
+						: ensureTrailingSlash(`/${item.uri}`);
 
 			// Handle preview mode URLs
 			if (isPreview && !isUrl) {
 				const parts = href.split('/').filter(Boolean);
 				// Remove hash fragment if present for URL manipulation
-				const hashIndex = parts.findIndex(part => part.includes('#'));
-				const hashFragment = hashIndex !== -1 ? parts[hashIndex].split('#')[1] : '';
-				const cleanParts = hashIndex !== -1 ? [...parts.slice(0, hashIndex), parts[hashIndex].split('#')[0]] : parts;
+				const hashIndex = parts.findIndex((part) => part.includes('#'));
+				const hashFragment =
+					hashIndex !== -1 ? parts[hashIndex].split('#')[1] : '';
+				const cleanParts =
+					hashIndex !== -1
+						? [...parts.slice(0, hashIndex), parts[hashIndex].split('#')[0]]
+						: parts;
 
 				if (shouldIncludeLanguage) {
 					const hasLang = cleanParts[0] === effectiveLang;
-					const finalParts = hasLang ? cleanParts : [effectiveLang, ...cleanParts];
-					href = ensureTrailingSlash(`/preview/${finalParts.filter(Boolean).join('/')}`);
+					const finalParts = hasLang
+						? cleanParts
+						: [effectiveLang, ...cleanParts];
+					href = ensureTrailingSlash(
+						`/preview/${finalParts.filter(Boolean).join('/')}`
+					);
 				} else {
-					href = ensureTrailingSlash(`/preview/${cleanParts.filter(Boolean).join('/')}`);
+					href = ensureTrailingSlash(
+						`/preview/${cleanParts.filter(Boolean).join('/')}`
+					);
 				}
 
 				// Re-add hash fragment if it existed
@@ -86,27 +103,33 @@ const getCommonClasses = (item, isActive, isLast) => [
 			const isAnchorLink = !!item.hash;
 
 			// Modern hierarchical path matching - elegant solution using startsWith
-			const normalizePath = (pathStr) => {
+			const normalizePath = (pathStr: string): string => {
 				// Remove trailing slash for consistent comparison, but preserve root "/"
 				return pathStr === '/' ? '/' : pathStr.replace(/\/$/, '');
 			};
 
 			const currentPath = normalizePath(path);
-			const expectedPath = shouldIncludeLanguage ? `/${effectiveLang}/${item.uri}` : `/${item.uri}`;
+			const expectedPath = shouldIncludeLanguage
+				? `/${effectiveLang}/${item.uri}`
+				: `/${item.uri}`;
 			const normalizedExpectedPath = normalizePath(expectedPath);
 			const alternativeExpectedPath = normalizePath(`/${item.uri}`);
 
 			// Check for hierarchical match: exact match OR current path starts with expected path + '/'
-			const isExactMatch = currentPath === normalizedExpectedPath || currentPath === alternativeExpectedPath;
-			const isParentMatch = currentPath.startsWith(normalizedExpectedPath + '/') ||
-								 currentPath.startsWith(alternativeExpectedPath + '/');
+			const isExactMatch =
+				currentPath === normalizedExpectedPath ||
+				currentPath === alternativeExpectedPath;
+			const isParentMatch =
+				currentPath.startsWith(normalizedExpectedPath + '/') ||
+				currentPath.startsWith(alternativeExpectedPath + '/');
 
-			const isActive = !(isHomepage && isAnchorLink) && (isExactMatch || isParentMatch);
+			const isActive =
+				!(isHomepage && isAnchorLink) && (isExactMatch || isParentMatch);
 
 			const isLast = translations.length === 0 && index === links.length - 1;
 
 			// Render appropriate component
-    if (item.classes?.includes('cta')) {
+			if (item.classes?.includes('cta')) {
 				return (
 					<Button
 						link={{ ...item, href }}

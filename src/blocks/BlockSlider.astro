@@ -30,11 +30,10 @@ const {
 	metadata,
 	aboveFold,
 } = Astro.props as BlockSliderComponentProps;
-const hasControl = (control) => controls && controls.includes(control);
+const hasControl = (control: string) => controls && controls.includes(control);
 const arrows = hasControl('arrows');
 const dots = hasControl('dots');
 const line = hasControl('line');
-const autoplay = hasControl('autoplay');
 const ticker = hasControl('ticker');
 const full = hasControl('full') ? 'h-screen' : null;
 const overlay = toggle && hasControl('overlay') ? 'overlay' : null;
@@ -145,7 +144,6 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 			const autoplay = controls?.includes('autoplay');
 			const ticker = controls?.includes('ticker');
 			const effect = blockSlider?.dataset.effect;
-			const direction = blockSlider?.dataset.direction;
 			const viewMobile = blockSlider?.dataset.viewmobile
 				? blockSlider.dataset.viewmobile
 				: '1';
@@ -207,7 +205,7 @@ const loadingStrategy = aboveFold ? undefined : 'lazy';
 					};
 				}
 
-				const swiper = new Swiper(swiperSlider as HTMLElement, swiperOptions);
+				new Swiper(swiperSlider as HTMLElement, swiperOptions);
 			}
 		}
 	});

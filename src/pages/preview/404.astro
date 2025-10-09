@@ -3,7 +3,6 @@ export const prerender = false;
 
 import {
 	getData,
-	getGlobal,
 	getLanguages,
 	type PageData,
 	type GlobalData,
@@ -14,10 +13,10 @@ import PageRenderer from '@components/PageRenderer.astro';
 process.env.ASTRO_PATH = Astro.url.pathname;
 
 // Variables to hold data or error state
-let data;
-let global;
+let data: PageData | undefined;
+let global: GlobalData | undefined;
 let hasError = false;
-let currentLangCode;
+let currentLangCode: string | undefined;
 
 try {
 	// Try to detect language from URL path

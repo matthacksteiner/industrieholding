@@ -12,7 +12,7 @@ const {
 
 {
 	layouts &&
-		layouts.map((layout, index) => {
+		layouts.map((layout) => {
 			const columns = layout.content.columns;
 			const anchor = layout.anchor;
 			const classes = layout.classes;
@@ -47,8 +47,8 @@ const {
 						backgroundHeight === 'full'
 							? 'flex min-h-screen'
 							: backgroundHeight === 'half'
-							? 'h-screenHalf flex'
-							: 'auto',
+								? 'h-screenHalf flex'
+								: 'auto',
 						classes,
 					]}
 					{...(attributes ?? {})}
@@ -288,7 +288,7 @@ const {
 		arrowButton.addEventListener('click', () => {
 			const currentColumns = arrowButton.closest('.columns');
 			const nextColumns = currentColumns?.nextElementSibling as HTMLElement;
-			let distanceToScroll;
+			let distanceToScroll: number;
 			if (nextColumns && nextColumns.classList.contains('columns')) {
 				const headerHeight = header?.offsetHeight || 0;
 				distanceToScroll = nextColumns.offsetTop - headerHeight;

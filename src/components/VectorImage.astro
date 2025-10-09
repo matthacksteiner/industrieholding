@@ -72,7 +72,9 @@ const svgClasses = [
 		const renderLinkedSvg = () => {
 			if (!link) return renderSvg();
 
-			let href, target, rel;
+			let href: string | undefined,
+				target: '_blank' | undefined,
+				rel: 'noopener' | undefined;
 
 			switch (link.type) {
 				case 'url':

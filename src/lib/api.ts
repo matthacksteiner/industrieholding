@@ -34,7 +34,7 @@ const DEBUG = import.meta.env.DEBUG_MODE ?? false;
 // Simple debug logger that only logs when DEBUG is true
 function debugLog(message: string) {
 	if (DEBUG) {
-		console.log(message);
+		console.warn(message);
 	}
 }
 
@@ -57,14 +57,6 @@ class KirbyApiError extends Error implements KirbyError {
 // ============================================================================
 // CORE API FUNCTIONS
 // ============================================================================
-
-/**
- * Check if we're in development mode
- * Development mode uses direct API calls instead of static files
- */
-function isDevMode(): boolean {
-	return !!DEV_MODE;
-}
 
 /**
  * Check if we're in production mode
@@ -199,9 +191,9 @@ function logDataSourceOnce() {
 				? `Using live API: ${API_URL}`
 				: 'Using local content files';
 
-		console.log(`[Baukasten] ${sourceInfo}`);
+		console.warn(`[Baukasten] ${sourceInfo}`);
 		if (DEBUG) {
-			console.log('[Baukasten] Debug logging enabled');
+			console.warn('[Baukasten] Debug logging enabled');
 		}
 
 		hasLoggedDataSource = true;
@@ -257,7 +249,7 @@ export async function getPage(slug: string, lang?: string): Promise<PageData> {
 		if (!lang) {
 			const global = await getGlobal();
 			const defaultLang = global.defaultLang.code;
-			console.log(`Trying with default language: ${defaultLang}/${slug}`);
+			console.warn(`Trying with default language: ${defaultLang}/${slug}`);
 			return await fetchData<PageData>(`/${defaultLang}/${slug}.json`);
 		}
 		throw error;
@@ -408,13 +400,11 @@ export async function getLocalizedPageUrl({
 	currentLang,
 	currentPageSlug,
 	isHome = false,
-	pageUri,
 }: {
 	targetLangCode: string;
 	currentLang: string;
 	currentPageSlug: string;
 	isHome?: boolean;
-	pageUri?: string;
 }): Promise<string> {
 	const { defaultLang, prefixDefaultLocale } = await getLanguageContext();
 

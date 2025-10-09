@@ -14,7 +14,7 @@ export const GET: APIRoute = async () => {
 	const frontendUrl = await getFrontendUrl();
 	const normalizedUrl = frontendUrl.endsWith('/')
 		? frontendUrl
-		: frontendUrl + '/';
+		: `${frontendUrl  }/`;
 
 	return new Response(await robotsTxt(normalizedUrl), {
 		headers: {

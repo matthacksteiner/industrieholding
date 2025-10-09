@@ -18,7 +18,7 @@ const {
 	{
 		columns && (
 			<>
-				{columns.map((column, index) => {
+				{columns.map((column) => {
 					const spanChild = column.span;
 					const span = spanChild / (12 / (spanParent || 12));
 					const blocks = column.blocks;
