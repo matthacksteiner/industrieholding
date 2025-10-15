@@ -66,7 +66,7 @@ export default defineConfig({
 		domains: [API_URL],
 	},
 	adapter: netlify({
-		imageCDN: false,
+		imageCDN: true,
 	}),
 	vite: {
 		resolve: {
