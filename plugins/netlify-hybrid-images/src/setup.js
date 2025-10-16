@@ -151,31 +151,112 @@ function transformContent(value, transformer) {
 }
 
 /**
- * Download a Kirby media asset to the local filesystem.
+ * Download a Kirby media asset to the local filesystem with retry logic.
  * @param {Object} asset
  * @param {string} asset.downloadUrl
  * @param {string} asset.filePath
+ * @param {string} asset.localPath
  * @param {ReturnType<typeof createPluginLogger>} logger
- * @returns {Promise<void>}
+ * @param {number} maxRetries
+ * @param {number} retryDelay
+ * @param {number} timeout
+ * @returns {Promise<boolean>}
  */
-async function downloadAsset(asset, logger) {
-	try {
-		ensureDirectoryExists(path.dirname(asset.filePath));
-		const response = await fetch(asset.downloadUrl);
+async function downloadAsset(
+	asset,
+	logger,
+	maxRetries = 3,
+	retryDelay = 1000,
+	timeout = 30000
+) {
+	let lastError;
 
-		if (!response.ok) {
-			throw new Error(`HTTP ${response.status} ${response.statusText}`);
+	for (let attempt = 1; attempt <= maxRetries; attempt++) {
+		const controller = new AbortController();
+		let timeoutId;
+
+		try {
+			ensureDirectoryExists(path.dirname(asset.filePath));
+
+			// Set up timeout using AbortController
+			timeoutId = setTimeout(() => {
+				controller.abort();
+			}, timeout);
+
+			const response = await fetch(asset.downloadUrl, {
+				signal: controller.signal,
+			});
+
+			if (!response.ok) {
+				// Don't retry on 404 or other client errors (except 429 rate limit)
+				if (
+					response.status >= 400 &&
+					response.status < 500 &&
+					response.status !== 429
+				) {
+					throw new Error(`HTTP ${response.status} ${response.statusText}`);
+				}
+				// Server errors (5xx) and rate limit (429) will be retried
+				lastError = new Error(`HTTP ${response.status} ${response.statusText}`);
+				if (attempt < maxRetries) {
+					const delay = retryDelay * attempt; // Exponential backoff
+					logger.warn(
+						`Attempt ${attempt}/${maxRetries} failed for ${asset.localPath}: ${lastError.message}, retrying in ${delay}ms...`
+					);
+					await new Promise((resolve) => setTimeout(resolve, delay));
+					continue;
+				}
+				throw lastError;
+			}
+
+			const arrayBuffer = await response.arrayBuffer();
+			await writeFile(asset.filePath, Buffer.from(arrayBuffer));
+
+			logger.success(`Cached ${asset.localPath}`);
+			return true;
+		} catch (error) {
+			lastError = error;
+
+			// Check if it's an abort error (timeout)
+			const isTimeout = error.name === 'AbortError';
+
+			// Retry on socket hang up, timeout, and connection reset errors
+			const isRetriable =
+				isTimeout ||
+				error.message?.includes('socket hang up') ||
+				error.message?.includes('ECONNRESET') ||
+				error.message?.includes('ETIMEDOUT') ||
+				error.message?.includes('ECONNREFUSED');
+
+			if (isRetriable && attempt < maxRetries) {
+				const delay = retryDelay * attempt; // Exponential backoff
+				const errorType = isTimeout ? 'timeout' : 'connection error';
+				logger.warn(
+					`Attempt ${attempt}/${maxRetries} failed for ${asset.localPath}: ${errorType}, retrying in ${delay}ms...`
+				);
+				await new Promise((resolve) => setTimeout(resolve, delay));
+				continue;
+			}
+
+			// Non-retriable error or max retries reached
+			if (attempt === maxRetries) {
+				logger.error(
+					`Failed to cache ${asset.downloadUrl} after ${maxRetries} attempts`,
+					lastError
+				);
+			} else {
+				logger.error(`Failed to cache ${asset.downloadUrl}`, lastError);
+			}
+			return false;
+		} finally {
+			// Clean up timeout
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
 		}
-
-		const arrayBuffer = await response.arrayBuffer();
-		await writeFile(asset.filePath, Buffer.from(arrayBuffer));
-
-		logger.success(`Cached ${asset.localPath}`);
-		return true;
-	} catch (error) {
-		logger.error(`Failed to cache ${asset.downloadUrl}`, error);
-		return false;
 	}
+
+	return false;
 }
 
 /**
@@ -183,8 +264,18 @@ async function downloadAsset(asset, logger) {
  * @param {Array<Object>} assets
  * @param {number} concurrency
  * @param {ReturnType<typeof createPluginLogger>} logger
+ * @param {number} maxRetries
+ * @param {number} retryDelay
+ * @param {number} timeout
  */
-async function downloadWithConcurrency(assets, concurrency, logger) {
+async function downloadWithConcurrency(
+	assets,
+	concurrency,
+	logger,
+	maxRetries,
+	retryDelay,
+	timeout
+) {
 	if (!assets.length) {
 		return { success: 0, failed: 0 };
 	}
@@ -194,22 +285,30 @@ async function downloadWithConcurrency(assets, concurrency, logger) {
 	let success = 0;
 	let failed = 0;
 
-	const workers = Array.from({ length: Math.min(boundedConcurrency, assets.length) }, () =>
-		(async () => {
-			while (index < assets.length) {
-				const currentIndex = index++;
-				const asset = assets[currentIndex];
-				if (!asset) {
-					break;
+	const workers = Array.from(
+		{ length: Math.min(boundedConcurrency, assets.length) },
+		() =>
+			(async () => {
+				while (index < assets.length) {
+					const currentIndex = index++;
+					const asset = assets[currentIndex];
+					if (!asset) {
+						break;
+					}
+					const result = await downloadAsset(
+						asset,
+						logger,
+						maxRetries,
+						retryDelay,
+						timeout
+					);
+					if (result) {
+						success++;
+					} else {
+						failed++;
+					}
 				}
-				const result = await downloadAsset(asset, logger);
-				if (result) {
-					success++;
-				} else {
-					failed++;
-				}
-			}
-		})()
+			})()
 	);
 
 	await Promise.all(workers);
@@ -257,12 +356,16 @@ export default async function netlifyHybridImagesSetup({
 		const jsonFiles = collectJsonFiles(contentDir);
 
 		if (!jsonFiles.length) {
-			logger.warn('No Kirby JSON cache files found. Skipping hybrid image caching.');
+			logger.warn(
+				'No Kirby JSON cache files found. Skipping hybrid image caching.'
+			);
 			return;
 		}
 
 		logger.info(
-			`Scanning ${jsonFiles.length} JSON file${jsonFiles.length === 1 ? '' : 's'} for Kirby media references`
+			`Scanning ${jsonFiles.length} JSON file${
+				jsonFiles.length === 1 ? '' : 's'
+			} for Kirby media references`
 		);
 
 		const assetMap = new Map();
@@ -298,18 +401,25 @@ export default async function netlifyHybridImagesSetup({
 		}
 
 		if (!assetMap.size) {
-			logger.warn('No Kirby media URLs detected in content. Skipping downloads.');
+			logger.warn(
+				'No Kirby media URLs detected in content. Skipping downloads.'
+			);
 			return;
 		}
 
 		logger.info(
-			`Preparing to cache ${assetMap.size} media asset${assetMap.size === 1 ? '' : 's'} locally`
+			`Preparing to cache ${assetMap.size} media asset${
+				assetMap.size === 1 ? '' : 's'
+			} locally`
 		);
 
 		const downloadResult = await downloadWithConcurrency(
 			Array.from(assetMap.values()),
 			options.concurrency,
-			logger
+			logger,
+			options.maxRetries || 3,
+			options.retryDelay || 1000,
+			options.timeout || 30000
 		);
 
 		if (downloadResult.success > 0) {
@@ -358,7 +468,9 @@ export default async function netlifyHybridImagesSetup({
 			}
 
 			logger.success(
-				`Rewrote media URLs in ${rewrittenFiles} JSON file${rewrittenFiles === 1 ? '' : 's'}`
+				`Rewrote media URLs in ${rewrittenFiles} JSON file${
+					rewrittenFiles === 1 ? '' : 's'
+				}`
 			);
 		}
 
