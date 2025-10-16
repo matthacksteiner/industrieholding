@@ -18,6 +18,7 @@
 		"font-downloader",
 		"lang-folder-rename",
 		"netlify-remote-images",
+		"netlify-hybrid-images",
 		"netlify-pretty-urls",
 		"baukasten-utils"
 	]
