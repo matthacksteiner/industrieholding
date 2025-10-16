@@ -18,9 +18,15 @@ const defaultOptions = {
 	// Folder inside publicDir where Kirby media will be stored
 	mediaDir: 'media',
 	// Maximum number of concurrent download operations
-	concurrency: 4,
+	concurrency: 2,
 	// Whether to rewrite Kirby media URLs inside cached JSON content
 	rewriteContent: true,
+	// Number of retry attempts for failed downloads
+	maxRetries: 3,
+	// Base delay between retries in milliseconds (will use exponential backoff)
+	retryDelay: 1000,
+	// Request timeout in milliseconds
+	timeout: 30000,
 };
 
 export default createPluginConfig({
@@ -32,4 +38,3 @@ export default createPluginConfig({
 		'astro:build:start': netlifyHybridImagesSetup,
 	},
 });
-
