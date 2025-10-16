@@ -17,15 +17,19 @@
     "test": "vitest",
     "test:sync": "node plugins/astro-kirby-sync/test-incremental-sync.js",
     "clean": "rimraf public/content",
-    "clean-build": "npm run clean && npm run build",
-    "clean-dev": "npm run clean && npm run dev"
+    "clean:images": "rimraf public/media",
+    "clean:fonts": "rimraf public/fonts",
+    "clean:all": "npm run clean && npm run clean:images && npm run clean:fonts",
+    "sync:images": "NODE_ENV=production node -e \"import('./plugins/netlify-hybrid-images/src/setup.js').then(m => m.default({ logger: { info: console.log, warn: console.warn, error: console.error }, options: { enabled: true, publicDir: 'public', mediaDir: 'media', concurrency: 2, rewriteContent: true, maxRetries: 3, retryDelay: 1000, timeout: 30000 } }))\"",
+    "clean-build": "npm run clean:all && npm run build",
+    "clean-dev": "npm run clean:all && npm run dev"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/netlify": "^6.5.11",
+    "@astrojs/netlify": "^6.5.13",
     "@astrojs/tailwind": "^6.0.2",
     "@iarna/toml": "^2.2.5",
-    "astro": "^5.14.1",
+    "astro": "^5.14.5",
     "astro-cloudinary": "^1.3.0",
     "astro-icon": "^1.1.0",
     "dotenv": "^16.3.1",

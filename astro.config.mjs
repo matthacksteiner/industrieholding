@@ -8,7 +8,7 @@ import compress from '@playform/compress';
 import langFolderRename from './plugins/lang-folder-rename/langFolderRename.js';
 import fontDownloader from './plugins/font-downloader/fontDownloader.js';
 import astroKirbySync from './plugins/astro-kirby-sync/index.js';
-import netlifyRemoteImages from './plugins/netlify-remote-images/index.js';
+import netlifyHybridImages from './plugins/netlify-hybrid-images/index.js';
 import netlifyPrettyUrls from './plugins/netlify-pretty-urls/index.js';
 import path from 'path';
 
@@ -52,7 +52,7 @@ export default defineConfig({
 		icon(),
 		langFolderRename(),
 		fontDownloader(),
-		netlifyRemoteImages(),
+		netlifyHybridImages(),
 		netlifyPrettyUrls(),
 		compress({
 			HTML: true,
@@ -62,11 +62,8 @@ export default defineConfig({
 			SVG: true,
 		}),
 	],
-	image: {
-		domains: [API_URL],
-	},
 	adapter: netlify({
-		imageCDN: false,
+		imageCDN: true,
 	}),
 	vite: {
 		resolve: {
