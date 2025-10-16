@@ -17,3 +17,8 @@ NODE_VERSION = "23"
   autoLaunch = false
 [images]
 remote_images = [ "https://cms.baukasten.matthiashacksteiner.net/media/.*" ]
+
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
