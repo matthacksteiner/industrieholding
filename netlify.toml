@@ -15,3 +15,5 @@ NODE_VERSION = "23"
 
 [dev]
   autoLaunch = false
+[images]
+remote_images = [ "https://cms.baukasten.matthiashacksteiner.net/media/.*" ]

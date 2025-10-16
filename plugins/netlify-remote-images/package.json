@@ -1,0 +1,8 @@
+{
+  "name": "netlify-remote-images",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Updates netlify.toml remote_images setting based on KIRBY_URL",
+  "main": "index.js",
+  "private": true
+}
