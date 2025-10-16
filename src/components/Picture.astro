@@ -268,7 +268,7 @@ function createProductionSrcSet(
 	const ratio = isMobile ? ratioMobileValue : ratioDesktopValue;
 	const screenWidth = screenRange.maxWidth;
 
-	return [1, 2, 3]
+	return [1, 2]
 		.map((dpr) => {
 			const imgWidth = calculateResponsiveImageWidth(screenWidth, span) * dpr;
 			const imgHeight = calculateImageHeight(imgWidth, ratio);
