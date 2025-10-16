@@ -19,6 +19,10 @@ const defaultOptions = {
 	mediaDir: 'media',
 	// Maximum number of concurrent download operations
 	concurrency: 2,
+	// Cache manifest filename for storing remote metadata
+	cacheManifest: '.netlify-hybrid-images.json',
+	// Skip fetching assets when remote responds not modified
+	skipUnchanged: true,
 	// Whether to rewrite Kirby media URLs inside cached JSON content
 	rewriteContent: true,
 	// Number of retry attempts for failed downloads

@@ -8,7 +8,7 @@ relying on origin fetches.
 
 1. Reads the cached Kirby JSON content in `public/content/`.
 2. Detects media URLs that originate from `${KIRBY_URL}/media/...`.
-3. Downloads each original asset into `public/media/…`.
+3. Downloads each original asset into `public/media/…`, skipping already cached files when the source is unchanged.
 4. (Optional) Rewrites the JSON content to reference the local `/media/...` path instead of the
    Kirby origin.
 
@@ -34,16 +34,25 @@ Ensure the `KIRBY_URL` environment variable is available so the plugin can detec
 
 ## Configuration
 
-| Option           | Type    | Default    | Description                                                                 |
-| ---------------- | ------- | ---------- | --------------------------------------------------------------------------- |
-| `enabled`        | boolean | `true`     | Toggles the plugin.                                                         |
-| `publicDir`      | string  | `'public'` | Root directory where Astro copies static assets.                            |
-| `mediaDir`       | string  | `'media'`  | Sub-directory inside `publicDir` where Kirby assets will be stored.         |
-| `concurrency`    | number  | `2`        | Maximum number of simultaneous downloads.                                   |
-| `rewriteContent` | boolean | `true`     | Replace Kirby media URLs in `public/content/*.json` with the local variant. |
-| `maxRetries`     | number  | `3`        | Number of retry attempts for failed downloads.                              |
-| `retryDelay`     | number  | `1000`     | Base delay between retries in milliseconds (uses exponential backoff).      |
-| `timeout`        | number  | `30000`    | Request timeout in milliseconds (30 seconds).                               |
+| Option           | Type             | Default                          | Description                                                                 |
+| ---------------- | ---------------- | -------------------------------- | --------------------------------------------------------------------------- |
+| `enabled`        | boolean          | `true`                           | Toggles the plugin.                                                         |
+| `publicDir`      | string           | `'public'`                       | Root directory where Astro copies static assets.                            |
+| `mediaDir`       | string           | `'media'`                        | Sub-directory inside `publicDir` where Kirby assets will be stored.         |
+| `concurrency`    | number           | `2`                              | Maximum number of simultaneous downloads.                                   |
+| `cacheManifest`  | string \| false  | `'.netlify-hybrid-images.json'`  | File (within `mediaDir`) that stores ETag metadata between builds.          |
+| `skipUnchanged`  | boolean          | `true`                           | Use cached metadata to avoid re-downloading unchanged assets.               |
+| `rewriteContent` | boolean          | `true`                           | Replace Kirby media URLs in `public/content/*.json` with the local variant. |
+| `maxRetries`     | number           | `3`                              | Number of retry attempts for failed downloads.                              |
+| `retryDelay`     | number           | `1000`                           | Base delay between retries in milliseconds (uses exponential backoff).      |
+| `timeout`        | number           | `30000`                          | Request timeout in milliseconds (30 seconds).                               |
+
+### Caching Behaviour
+
+When `cacheManifest` is enabled, the plugin records remote ETags and last-modified headers in
+`public/media/.netlify-hybrid-images.json`. Subsequent builds reuse that metadata to send
+conditional requests and skip fetching assets that have not changed. Set `skipUnchanged` to `false`
+or `cacheManifest` to `false` to force a full re-download on every build.
 
 ### Retry Logic
 
