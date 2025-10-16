@@ -167,9 +167,23 @@ async function downloadAsset(
 	logger,
 	maxRetries = 3,
 	retryDelay = 1000,
-	timeout = 30000
+	timeout = 30000,
+	skipUnchanged = true
 ) {
 	let lastError;
+	const fileExists = fs.existsSync(asset.filePath);
+	const hasMetadata = Boolean(
+		asset.metadata && (asset.metadata.etag || asset.metadata.lastModified)
+	);
+	const shouldUseConditional = skipUnchanged && fileExists && hasMetadata;
+
+	const conditionalHeaders = {};
+	if (shouldUseConditional && asset.metadata.etag) {
+		conditionalHeaders['If-None-Match'] = asset.metadata.etag;
+	}
+	if (shouldUseConditional && asset.metadata.lastModified) {
+		conditionalHeaders['If-Modified-Since'] = asset.metadata.lastModified;
+	}
 
 	for (let attempt = 1; attempt <= maxRetries; attempt++) {
 		const controller = new AbortController();
@@ -179,13 +193,22 @@ async function downloadAsset(
 			ensureDirectoryExists(path.dirname(asset.filePath));
 
 			// Set up timeout using AbortController
-			timeoutId = setTimeout(() => {
-				controller.abort();
-			}, timeout);
+			timeoutId = setTimeout(() => controller.abort(), timeout);
 
+			const headers = shouldUseConditional ? { ...conditionalHeaders } : undefined;
 			const response = await fetch(asset.downloadUrl, {
 				signal: controller.signal,
+				headers,
 			});
+
+			if (response.status === 304) {
+				const metadata = {
+					...(asset.metadata || {}),
+					checkedAt: new Date().toISOString(),
+				};
+				logger.info(`Skipped ${asset.localPath} (not modified)`);
+				return { status: 'skipped', metadata };
+			}
 
 			if (!response.ok) {
 				// Don't retry on 404 or other client errors (except 429 rate limit)
@@ -212,8 +235,17 @@ async function downloadAsset(
 			const arrayBuffer = await response.arrayBuffer();
 			await writeFile(asset.filePath, Buffer.from(arrayBuffer));
 
+			const now = new Date().toISOString();
+			const metadata = {
+				etag: response.headers.get('etag') || undefined,
+				lastModified: response.headers.get('last-modified') || undefined,
+				size: arrayBuffer.byteLength,
+				downloadedAt: now,
+				checkedAt: now,
+			};
+
 			logger.success(`Cached ${asset.localPath}`);
-			return true;
+			return { status: 'downloaded', metadata };
 		} catch (error) {
 			lastError = error;
 
@@ -247,7 +279,7 @@ async function downloadAsset(
 			} else {
 				logger.error(`Failed to cache ${asset.downloadUrl}`, lastError);
 			}
-			return false;
+			return { status: 'failed' };
 		} finally {
 			// Clean up timeout
 			if (timeoutId) {
@@ -256,7 +288,7 @@ async function downloadAsset(
 		}
 	}
 
-	return false;
+	return { status: 'failed' };
 }
 
 /**
@@ -274,16 +306,26 @@ async function downloadWithConcurrency(
 	logger,
 	maxRetries,
 	retryDelay,
-	timeout
+	timeout,
+	skipUnchanged
 ) {
 	if (!assets.length) {
-		return { success: 0, failed: 0 };
+		return {
+			success: 0,
+			skipped: 0,
+			failed: 0,
+			manifestUpdates: new Map(),
+			manifestRemovals: new Set(),
+		};
 	}
 
 	const boundedConcurrency = Math.max(1, concurrency);
 	let index = 0;
 	let success = 0;
+	let skipped = 0;
 	let failed = 0;
+	const manifestUpdates = new Map();
+	const manifestRemovals = new Set();
 
 	const workers = Array.from(
 		{ length: Math.min(boundedConcurrency, assets.length) },
@@ -300,19 +342,34 @@ async function downloadWithConcurrency(
 						logger,
 						maxRetries,
 						retryDelay,
-						timeout
+						timeout,
+						skipUnchanged
 					);
-					if (result) {
+					if (result.status === 'downloaded') {
 						success++;
+					} else if (result.status === 'skipped') {
+						skipped++;
 					} else {
 						failed++;
+					}
+
+					if (result.metadata) {
+						manifestUpdates.set(asset.cacheKey, {
+							...result.metadata,
+							remoteUrl: asset.remoteUrl,
+							localPath: asset.localPath,
+						});
+					}
+
+					if (result.status === 'failed') {
+						manifestRemovals.add(asset.cacheKey);
 					}
 				}
 			})()
 	);
 
 	await Promise.all(workers);
-	return { success, failed };
+	return { success, skipped, failed, manifestUpdates, manifestRemovals };
 }
 
 export default async function netlifyHybridImagesSetup({
@@ -343,6 +400,25 @@ export default async function netlifyHybridImagesSetup({
 		const publicDir = path.resolve(projectRoot, options.publicDir);
 		const contentDir = path.join(publicDir, 'content');
 		const mediaOutputDir = path.join(publicDir, options.mediaDir);
+		const manifestPath = options.cacheManifest
+			? path.join(mediaOutputDir, options.cacheManifest)
+			: null;
+		let manifest = {};
+
+		if (manifestPath) {
+			try {
+				const rawManifest = await readFile(manifestPath, 'utf8');
+				manifest = JSON.parse(rawManifest);
+			} catch (error) {
+				if (error.code !== 'ENOENT') {
+					logger.warn(
+						`Unable to read cache manifest at ${manifestPath}. Rebuilding metadata.`
+					);
+				}
+			}
+		}
+
+		const skipUnchanged = Boolean(options.skipUnchanged && manifestPath);
 
 		ensureDirectoryExists(mediaOutputDir);
 
@@ -388,7 +464,14 @@ export default async function netlifyHybridImagesSetup({
 					}
 
 					if (!assetMap.has(match.cacheKey)) {
-						assetMap.set(match.cacheKey, match);
+						const cachedMetadata =
+							manifestPath && manifest
+								? manifest[match.cacheKey] || null
+								: null;
+						assetMap.set(match.cacheKey, {
+							...match,
+							metadata: cachedMetadata,
+						});
 					}
 
 					return value;
@@ -419,7 +502,8 @@ export default async function netlifyHybridImagesSetup({
 			logger,
 			options.maxRetries || 3,
 			options.retryDelay || 1000,
-			options.timeout || 30000
+			options.timeout || 30000,
+			skipUnchanged
 		);
 
 		if (downloadResult.success > 0) {
@@ -428,6 +512,43 @@ export default async function netlifyHybridImagesSetup({
 					downloadResult.success === 1 ? '' : 's'
 				} to /${options.mediaDir}`
 			);
+		}
+
+		if (downloadResult.skipped > 0) {
+			logger.info(
+				`Skipped re-downloading ${downloadResult.skipped} cached asset${
+					downloadResult.skipped === 1 ? '' : 's'
+				}`
+			);
+		}
+
+		if (manifestPath) {
+			let manifestChanged = false;
+
+			for (const [key, data] of downloadResult.manifestUpdates) {
+				const previous = manifest[key] || {};
+				manifest[key] = { ...previous, ...data };
+				manifestChanged = true;
+			}
+
+			for (const key of downloadResult.manifestRemovals) {
+				if (manifest[key]) {
+					delete manifest[key];
+					manifestChanged = true;
+				}
+			}
+
+			if (manifestChanged) {
+				ensureDirectoryExists(path.dirname(manifestPath));
+				await writeFile(
+					manifestPath,
+					`${JSON.stringify(manifest, null, 2)}\n`,
+					'utf8'
+				);
+				logger.info(
+					`Updated cache manifest at ${path.relative(projectRoot, manifestPath)}`
+				);
+			}
 		}
 
 		if (downloadResult.failed > 0) {
