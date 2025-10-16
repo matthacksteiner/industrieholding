@@ -9,8 +9,10 @@ import {
 	getProjectRoot,
 	handleNetlifyError,
 } from '../../baukasten-utils/index.js';
+import { validateNetlifyToml, checkCacheHeaders } from './validation.js';
 
 const projectRoot = getProjectRoot(import.meta.url);
+const NETLIFY_DIR = '.netlify';
 const { readFile, writeFile } = fs.promises;
 
 /**
@@ -195,7 +197,9 @@ async function downloadAsset(
 			// Set up timeout using AbortController
 			timeoutId = setTimeout(() => controller.abort(), timeout);
 
-			const headers = shouldUseConditional ? { ...conditionalHeaders } : undefined;
+			const headers = shouldUseConditional
+				? { ...conditionalHeaders }
+				: undefined;
 			const response = await fetch(asset.downloadUrl, {
 				signal: controller.signal,
 				headers,
@@ -396,14 +400,26 @@ export default async function netlifyHybridImagesSetup({
 			return;
 		}
 
+		// Validate netlify.toml configuration
+		validateNetlifyToml(kirbyUrl, projectRoot, logger);
+
+		// Check for Cache-Control headers
+		checkCacheHeaders(projectRoot, options.mediaDir, logger);
+
 		const mediaPrefix = `${kirbyUrl}/media/`;
 		const publicDir = path.resolve(projectRoot, options.publicDir);
 		const contentDir = path.join(publicDir, 'content');
 		const mediaOutputDir = path.join(publicDir, options.mediaDir);
+		// Store manifest in .netlify/ directory instead of public/
 		const manifestPath = options.cacheManifest
-			? path.join(mediaOutputDir, options.cacheManifest)
+			? path.join(projectRoot, NETLIFY_DIR, options.cacheManifest)
 			: null;
 		let manifest = {};
+
+		// Ensure .netlify directory exists
+		if (manifestPath) {
+			ensureDirectoryExists(path.dirname(manifestPath));
+		}
 
 		if (manifestPath) {
 			try {

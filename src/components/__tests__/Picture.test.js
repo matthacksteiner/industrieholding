@@ -231,6 +231,7 @@ describe('Picture Component', () => {
 		expect(result).toContain('&#38;w='); // HTML encoded &w=
 		expect(result).toContain('&#38;h='); // HTML encoded &h=
 		expect(result).toContain('&#38;fit=cover&#38;fm=avif&#38;q=70'); // HTML encoded parameters
+		expect(result).toContain('&#38;fit=cover&#38;fm=webp&#38;q=70'); // Additional WebP source
 
 		// Check for responsive srcset (1x and 2x DPR values)
 		expect(result).toContain('1x,');

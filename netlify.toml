@@ -18,3 +18,8 @@ remote_images = [ "https://cms.industrieholding.com/media/.*" ]
 
 [dev]
   autoLaunch = false
+
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
